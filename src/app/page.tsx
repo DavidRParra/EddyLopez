@@ -1,103 +1,168 @@
+'use client';
 import Image from "next/image";
+import { useState } from "react";
+import {FaChevronDown, FaSearch} from "react-icons/fa";
+import Slider from "react-slick";
+import "slick-carousel/slick/slick.css";
+import "slick-carousel/slick/slick-theme.css";
 
 export default function Home() {
-  return (
-    <div className="font-sans grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20">
-      <main className="flex flex-col gap-[32px] row-start-2 items-center sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol className="font-mono list-inside list-decimal text-sm/6 text-center sm:text-left">
-          <li className="mb-2 tracking-[-.01em]">
-            Get started by editing{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] font-mono font-semibold px-1 py-0.5 rounded">
-              src/app/page.tsx
-            </code>
-            .
-          </li>
-          <li className="tracking-[-.01em]">
-            Save and see your changes instantly.
-          </li>
-        </ol>
 
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:w-auto"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 w-full sm:w-auto md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Read our docs
-          </a>
+  const [isOpen, setIsOpen] = useState(false)
+  const [inputValue, setInputValue] = useState('');
+
+  const settings = {
+    dots: true,
+    infinite: true,
+    speed: 500,
+    slidesToShow: 1,
+    slidesToScroll: 1,
+    autoplaySpeed: 5000,
+    autoplay: true,
+    cssEase: "linear"
+  };
+
+  return (
+    <div className="">
+
+      {/*<div 
+      className=" z-[-1] h-[100vh] bg-cover bg-center bg-black/25 bg-blend-overlay flex  flex-col items-center justify-center lg:justify-en" 
+      style={{backgroundImage : `url('/eddylopez9.jpg')`}}>
+
+        
+        <h1 className="text-white !text-[4rem] font-bold">Especialistas en proyectos arquitectónicos a medida</h1>
+        
+
+        <p className="text-white text-[2rem] my-3">Explora algunos de nuestros proyectos</p>
+
+        
+
+    
+
+      </div>
+*/}
+      <div className="flex flex-col items-center gap-8 max-w-[100vw] mx-[auto] justify-center">
+        
+
+        <Slider {...settings} className="flex w-[100%] ">    
+          <div className="felx w-full h-[80vh] ">
+            <Image src="/eddylopez7.jpg" alt="Imagen fondo" height={500} width={500} className="w-full h-full rounded-lg"/>
+          </div>
+
+          <div className="felx w-full h-[80vh]">
+            <Image src="/eddylopez8.jpg" alt="Imagen fondo" width={500} height={500} className="w-full h-full rounded-lg"/>
+          </div>
+
+          {/*
+          <Image src="/eddylopez2.jpg" alt="Imagen fondo" width={500} height={500} className="w-[100vw]"/>
+          <Image src="/eddylopez3.jpg" alt="Imagen fondo" width={500} height={500} className="w-[100vw]"/>
+          <Image src="/eddylopez4.jpg" alt="Imagen fondo" width={500} height={500} className="w-[100vw]"/>
+          <div className="felx w-full h-[50rem] object-cover">
+            <Image src="/eddylopez5.jpg" alt="Imagen fondo" width={500} height={500} className="w-[100vw]"/>
+          </div>
+          */}
+
+          <div className="felx w-full h-[80vh] object-cover">
+            <Image src="/eddylopez6.jpg" alt="Imagen fondo" width={500} height={500} className="w-full h-full rounded-lg"/>
+          </div>
+          
+          <div className="felx w-full h-[80vh] object-cover">
+            <Image src="/eddylopez10.jpg" alt="Imagen fondo" width={500} height={500} className="w-full h-full rounded-lg"/>
+          </div>
+
+          <div className="felx w-full h-[80vh] object-cover">
+            <Image src="/eddylopez11.jpg" alt="Imagen fondo" width={500} height={500} className="w-full h-full rounded-lg"/>
+          </div>
+
+          
+        </Slider>
+        <div className="absolute left-0 top-0 ">
+          <div className=" relative w-[100vw] h-[90vh] flex items-end justify-end">
+            <div className="flex w-[50%] bg-white items-start gap-5 justify-center mx-[auto] mb-[20vh text-[2rem] p-[2rem]">
+
+              <div className=" w-[35%]">
+
+                <button
+                  onClick={() => setIsOpen(!isOpen)}
+                  className=" flex justify-between w-full border p-2 text-left">
+                  Ciudad
+
+                  {isOpen && (
+                    <FaChevronDown className="rotate-180"/>
+
+                  ) || (
+                    <FaChevronDown/>
+                  )}
+                  
+                </button>
+
+                {isOpen && (
+                  <div className="flex flex-col gap-4 z-10 w-full mt-1 bg-white shadow-lg p-[.5rem]">
+                    <input type="text" className="w-full bg-gray-200 text-[3rem] p-1"/>
+                    <div className=" flex justify-center gap-2 w-full">
+                      <button className="w-[100%] border cursor-pointer hover:bg-gray-100">Todo</button>
+                      <button className="w-[100%] border cursor-pointer hover:bg-gray-100">Desmarcar</button>
+                    </div>
+
+                    <div className="flex flex-col gap-6 scroll-auto h-[12rem] overflow-y-scroll">
+                      <p className="hover:bg-gray-100 cursor-pointer w-full p-2">La Vega</p>
+
+                      <p className="hover:bg-gray-100 cursor-pointer w-full p-2">Santiago</p>
+
+                      <p className="hover:bg-gray-100 cursor-pointer w-full p-2">Puerto Plata</p>
+
+                      <p className="hover:bg-gray-100 cursor-pointer w-full p-2">Bavaro</p>
+
+                      <p className="hover:bg-gray-100 cursor-pointer w-full p-2">Punta Cana</p>
+
+                      <p className="hover:bg-gray-100 cursor-pointer w-full p-2">Santo Domingo</p>
+
+                      <p className="hover:bg-gray-100 cursor-pointer w-full p-2">Moca</p>
+                      
+                    </div>
+                  </div>
+                )}
+              </div>
+
+              <div className="flex items-center w-full gap-2">
+                <div className="flex relative  w-full items-center">
+                    <div className="absolute left-2">
+                      <FaSearch className={inputValue ? 'text-black' : 'text-gray-500'}/>
+                    </div>
+                  
+                  
+                  <input type="text" value={inputValue} onChange={(e) => setInputValue(e.target.value)} placeholder="Buscar Propiedad" className="border pl-12 p-2 w-full"/>
+                </div>
+                
+
+                <button className="border p-2 ">
+
+                  Buscar
+                </button>
+
+              </div>
+
+            </div>
+
+          </div>
+        </div>*
+        
+
+      </div>
+
+      <section className="flex flex-col items-center lg:my-[5rem]">
+
+        <div className="flex flex-col text-center text-[1.5rem] w-[40%]">
+          <h1>Crea la propiedad de tus sueños con nosotros</h1>
+          <p>Transformamos tus ideas en espacios únicos, combinando diseño innovador, funcionalidad y calidad para construir un lugar que refleje tu estilo y personalidad.</p>
         </div>
-      </main>
-      <footer className="row-start-3 flex gap-[24px] flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
-      </footer>
+
+        
+      </section>
+
+      
+
+
     </div>
   );
 }
