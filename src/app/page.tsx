@@ -18,7 +18,7 @@ export default function Home() {
     slidesToShow: 1,
     slidesToScroll: 1,
     autoplaySpeed: 5000,
-    autoplay: true,
+    autoplay: false,
     cssEase: "linear"
   };
 
@@ -44,13 +44,13 @@ export default function Home() {
       <div className="flex flex-col items-center gap-8 max-w-[100vw] mx-[auto] justify-center">
         
 
-        <Slider {...settings} className="flex w-[100%] ">    
-          <div className="felx w-full h-[80vh] ">
-            <Image src="/eddylopez7.jpg" alt="Imagen fondo" height={500} width={500} className="w-full h-full rounded-lg"/>
+        <Slider {...settings} className="flex w-[70%] ">    
+          <div className="felx w-[60%] h-[80vh] ">
+            <Image src="/eddylopez7.jpg" alt="Imagen fondo" width={1500} height={1000}  className="w-full h-full rounded-lg"/>
           </div>
 
           <div className="felx w-full h-[80vh]">
-            <Image src="/eddylopez8.jpg" alt="Imagen fondo" width={500} height={500} className="w-full h-full rounded-lg"/>
+            <Image src="/eddylopez8.jpg" alt="Imagen fondo" width={1000} height={1000} className="w-full h-full rounded-lg"/>
           </div>
 
           {/*
@@ -63,22 +63,22 @@ export default function Home() {
           */}
 
           <div className="felx w-full h-[80vh] object-cover">
-            <Image src="/eddylopez6.jpg" alt="Imagen fondo" width={500} height={500} className="w-full h-full rounded-lg"/>
+            <Image src="/eddylopez6.jpg" alt="Imagen fondo" width={1000} height={1000} className="w-full h-full rounded-lg"/>
           </div>
           
           <div className="felx w-full h-[80vh] object-cover">
-            <Image src="/eddylopez10.jpg" alt="Imagen fondo" width={500} height={500} className="w-full h-full rounded-lg"/>
+            <Image src="/eddylopez10.jpg" alt="Imagen fondo" width={1000} height={1000} className="w-full h-full rounded-lg"/>
           </div>
 
           <div className="felx w-full h-[80vh] object-cover">
-            <Image src="/eddylopez11.jpg" alt="Imagen fondo" width={500} height={500} className="w-full h-full rounded-lg"/>
+            <Image src="/eddylopez11.jpg" alt="Imagen fondo" width={700} height={1500} className="w-full h-full rounded-lg"/>
           </div>
 
           
         </Slider>
         <div className="absolute left-0 top-0 ">
           <div className=" relative w-[100vw] h-[90vh] flex items-end justify-end">
-            <div className="flex w-[50%] bg-white items-start gap-5 justify-center mx-[auto] mb-[20vh text-[2rem] p-[2rem]">
+            <div className="flex w-[50%] bg-white rounded-full items-start gap-5 justify-center mx-[auto] mb-[20vh text-[1.8rem] p-[2rem]">
 
               <div className=" w-[35%]">
 

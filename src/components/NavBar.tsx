@@ -4,7 +4,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { useState } from "react";
-import {FaChevronDown, FaInstagram} from "react-icons/fa";
+import {FaChevronDown, FaInstagram, FaFacebook, FaPhone} from "react-icons/fa";
 
 function NavBar(){
     const [isOpen, setIsOpen] = useState(false)
@@ -92,6 +92,13 @@ function NavBar(){
                         Inglés
                     </button>
                 </div>
+            </div>
+
+            <div className="flex gap-4">
+                <Link href="https://www.instagram.com/arqeddylopez/" target="_blank">
+                    <FaInstagram className="w-[3rem] h-[3rem]"/>
+                </Link>
+                <FaFacebook className="w-[3rem] h-[3rem]"/>
             </div>
 
             
