@@ -18,12 +18,12 @@ export default function Home() {
     slidesToShow: 1,
     slidesToScroll: 1,
     autoplaySpeed: 5000,
-    autoplay: false,
+    autoplay: true,
     cssEase: "linear"
   };
 
   return (
-    <div className="">
+    <div className="mt-3">
 
       {/*<div 
       className=" z-[-1] h-[100vh] bg-cover bg-center bg-black/25 bg-blend-overlay flex  flex-col items-center justify-center lg:justify-en" 
@@ -41,15 +41,15 @@ export default function Home() {
 
       </div>
 */}
-      <div className="flex flex-col items-center gap-8 max-w-[100vw] mx-[auto] justify-center">
+      <div className="flex flex-col items-center  max-w-[100vw] mx-[auto] justify-center">
         
 
-        <Slider {...settings} className="flex w-[70%] ">    
-          <div className="felx w-[60%] h-[80vh] ">
+        <Slider {...settings} className="flex w-[60%]">    
+          <div className="felx w-[60%] h-[70vh] ">
             <Image src="/eddylopez7.jpg" alt="Imagen fondo" width={1500} height={1000}  className="w-full h-full rounded-lg"/>
           </div>
 
-          <div className="felx w-full h-[80vh]">
+          <div className="felx w-full h-[70vh]">
             <Image src="/eddylopez8.jpg" alt="Imagen fondo" width={1000} height={1000} className="w-full h-full rounded-lg"/>
           </div>
 
@@ -62,25 +62,28 @@ export default function Home() {
           </div>
           */}
 
-          <div className="felx w-full h-[80vh] object-cover">
+          <div className="felx w-full h-[70vh] object-cover">
             <Image src="/eddylopez6.jpg" alt="Imagen fondo" width={1000} height={1000} className="w-full h-full rounded-lg"/>
           </div>
           
-          <div className="felx w-full h-[80vh] object-cover">
+          <div className="felx w-full h-[70vh] object-cover">
             <Image src="/eddylopez10.jpg" alt="Imagen fondo" width={1000} height={1000} className="w-full h-full rounded-lg"/>
           </div>
 
-          <div className="felx w-full h-[80vh] object-cover">
+          <div className="felx w-full h-[70vh] object-cover">
             <Image src="/eddylopez11.jpg" alt="Imagen fondo" width={700} height={1500} className="w-full h-full rounded-lg"/>
           </div>
 
           
         </Slider>
-        <div className="absolute left-0 top-0 ">
-          <div className=" relative w-[100vw] h-[90vh] flex items-end justify-end">
-            <div className="flex w-[50%] bg-white rounded-full items-start gap-5 justify-center mx-[auto] mb-[20vh text-[1.8rem] p-[2rem]">
+        <div className="text-[1.8rem] ">
+          <h1>Busca tu propiedad con nosotros</h1>
+        </div>
+        <div className="flex w-full my-2">
+          <div className=" relative w-full flex items-end justify-end">
+            <div className="flex w-[50%] bg-white rounded-full items-start gap-5 justify-center mx-[auto] text-[1.8rem]">
 
-              <div className=" w-[35%]">
+              <div className="relative w-[35%]">
 
                 <button
                   onClick={() => setIsOpen(!isOpen)}
@@ -97,11 +100,11 @@ export default function Home() {
                 </button>
 
                 {isOpen && (
-                  <div className="flex flex-col gap-4 z-10 w-full mt-1 bg-white shadow-lg p-[.5rem]">
-                    <input type="text" className="w-full bg-gray-200 text-[3rem] p-1"/>
+                  <div className="absolute bottom-15 flex flex-col gap-4 z-10 w-full rounded-t-lg mt-1 bg-white shadow-lg p-[.5rem]">
+                    <input type="text" className="w-full border px-3 rounded-lg text-[3rem] p-1"/>
                     <div className=" flex justify-center gap-2 w-full">
-                      <button className="w-[100%] border cursor-pointer hover:bg-gray-100">Todo</button>
-                      <button className="w-[100%] border cursor-pointer hover:bg-gray-100">Desmarcar</button>
+                      <button className="w-[100%] border rounded-lg px-2 cursor-pointer hover:bg-gray-100">Todo</button>
+                      <button className="w-[100%] border rounded-lg px-2 cursor-pointer hover:bg-gray-100">Desmarcar</button>
                     </div>
 
                     <div className="flex flex-col gap-6 scroll-auto h-[12rem] overflow-y-scroll">
@@ -145,20 +148,9 @@ export default function Home() {
             </div>
 
           </div>
-        </div>*
-        
-
-      </div>
-
-      <section className="flex flex-col items-center lg:my-[5rem]">
-
-        <div className="flex flex-col text-center text-[1.5rem] w-[40%]">
-          <h1>Crea la propiedad de tus sueños con nosotros</h1>
-          <p>Transformamos tus ideas en espacios únicos, combinando diseño innovador, funcionalidad y calidad para construir un lugar que refleje tu estilo y personalidad.</p>
         </div>
-
         
-      </section>
+      </div>
 
       
 
