@@ -1,5 +1,6 @@
 'use client';
 import Image from "next/image";
+import Link from "next/link";
 import { useState } from "react";
 import {FaChevronDown, FaSearch} from "react-icons/fa";
 import Slider from "react-slick";
@@ -70,13 +71,13 @@ export default function Home() {
             <Image src="/eddylopez10.jpg" alt="Imagen fondo" width={1000} height={1000} className="w-full h-full rounded-lg"/>
           </div>
 
-          <div className="felx w-full h-[70vh] object-cover">
+          <Link href="https://www.instagram.com/p/DMYxL3WysrM/" target="_blank" className="felx w-full h-[70vh] object-cover">
             <Image src="/eddylopez11.jpg" alt="Imagen fondo" width={700} height={1500} className="w-full h-full rounded-lg"/>
-          </div>
+          </Link>
 
           
         </Slider>
-        <div className="text-[1.8rem] ">
+        <div className="text-[1.8rem] text-[#2200b8]">
           <h1>Busca tu propiedad con nosotros</h1>
         </div>
         <div className="flex w-full my-2">
@@ -87,21 +88,21 @@ export default function Home() {
 
                 <button
                   onClick={() => setIsOpen(!isOpen)}
-                  className=" flex justify-between w-full border p-2 text-left">
+                  className=" flex justify-between w-full border border-[#2200b8] p-2 text-left">
                   Ciudad
 
                   {isOpen && (
-                    <FaChevronDown className="rotate-180"/>
+                    <FaChevronDown className="rotate-180 text-[#2200b8]"/>
 
                   ) || (
-                    <FaChevronDown/>
+                    <FaChevronDown className="text-[#2200b8]"/>
                   )}
                   
                 </button>
 
                 {isOpen && (
                   <div className="absolute bottom-15 flex flex-col gap-4 z-10 w-full rounded-t-lg mt-1 bg-white shadow-lg p-[.5rem]">
-                    <input type="text" className="w-full border px-3 rounded-lg text-[3rem] p-1"/>
+                    <input type="text" className="w-full border border-[#2200b8] px-3 rounded-lg text-[3rem] p-1"/>
                     <div className=" flex justify-center gap-2 w-full">
                       <button className="w-[100%] border rounded-lg px-2 cursor-pointer hover:bg-gray-100">Todo</button>
                       <button className="w-[100%] border rounded-lg px-2 cursor-pointer hover:bg-gray-100">Desmarcar</button>
@@ -134,11 +135,11 @@ export default function Home() {
                     </div>
                   
                   
-                  <input type="text" value={inputValue} onChange={(e) => setInputValue(e.target.value)} placeholder="Buscar Propiedad" className="border pl-12 p-2 w-full"/>
+                  <input type="text" value={inputValue} onChange={(e) => setInputValue(e.target.value)} placeholder="Buscar Propiedad" className="border border-[#2200b8] pl-12 p-2 w-full"/>
                 </div>
                 
 
-                <button className="border p-2 ">
+                <button className="border border-[#2200b8] p-2 ">
 
                   Buscar
                 </button>
