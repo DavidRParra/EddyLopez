@@ -21,7 +21,7 @@ function SocialMedia() {
             </Link>
 
             <Link 
-                href={"https://www.facebook.com/profile.php?id=61566923373474"} 
+                href={"#"} 
                 className="
                     flex justify-center items-center
                     bg-white text-[#2200b8] text-[2rem]

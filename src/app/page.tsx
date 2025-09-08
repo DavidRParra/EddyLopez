@@ -47,7 +47,7 @@ export default function Home() {
 
         <Slider {...settings} className="flex w-[60%]">    
           <div className="felx w-[60%] h-[70vh] ">
-            <Image src="/eddylopez7.jpg" alt="Imagen fondo" width={1500} height={1000}  className="w-full h-full rounded-lg"/>
+            <Image src="/Scroll_1.jpg" alt="Imagen fondo" width={1500} height={1000}  className="w-full h-full rounded-lg"/>
           </div>
 
           <div className="felx w-full h-[70vh]">
