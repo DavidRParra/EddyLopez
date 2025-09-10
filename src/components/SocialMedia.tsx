@@ -29,7 +29,7 @@ function SocialMedia() {
                     p-3 rounded-full shadow-lg 
                     hover:shadow-xl hover:text-[4rem] transition-all duration-300
                 "
-                target="_blank"
+                
             >
                 <FaFacebook />
             </Link>

@@ -64,7 +64,7 @@ export default function Home() {
           */}
 
           <div className="felx w-full h-[70vh] object-cover">
-            <Image src="/eddylopez6.jpg" alt="Imagen fondo" width={1000} height={1000} className="w-full h-full rounded-lg"/>
+            <Image src="/Scroll_2.jpg" alt="Imagen fondo" width={1000} height={1000} className="w-full h-full rounded-lg"/>
           </div>
           
           <div className="felx w-full h-[70vh] object-cover">
