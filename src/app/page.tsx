@@ -45,109 +45,121 @@ export default function Home() {
       <div className="flex flex-col items-center  max-w-[100vw] mx-[auto] justify-center">
         
 
-        <Slider {...settings} className="flex w-[60%]">    
-          <div className="felx w-[60%] h-[70vh] ">
-            <Image src="/Scroll_1.jpg" alt="Imagen fondo" width={1500} height={1000}  className="w-full h-full rounded-lg"/>
+        <Slider {...settings} className="flex w-[90vw] h-[80vh]">
+          <div className="felx w-[100%] h-[80vh] ">
+            <Image src="/Slider5.jpg" alt="Imagen fondo" width={1500} height={1000}  className="w-full h-full rounded-lg"/>
           </div>
 
-          <div className="felx w-full h-[70vh]">
-            <Image src="/eddylopez8.jpg" alt="Imagen fondo" width={1000} height={1000} className="w-full h-full rounded-lg"/>
+          <div className="felx w-[100%] h-[80vh] ">
+            <Image src="/Slider1.jpg" alt="Imagen fondo" width={1500} height={1000}  className="w-full h-full rounded-lg"/>
           </div>
 
-          {/*
-          <Image src="/eddylopez2.jpg" alt="Imagen fondo" width={500} height={500} className="w-[100vw]"/>
-          <Image src="/eddylopez3.jpg" alt="Imagen fondo" width={500} height={500} className="w-[100vw]"/>
-          <Image src="/eddylopez4.jpg" alt="Imagen fondo" width={500} height={500} className="w-[100vw]"/>
-          <div className="felx w-full h-[50rem] object-cover">
-            <Image src="/eddylopez5.jpg" alt="Imagen fondo" width={500} height={500} className="w-[100vw]"/>
+          <div className="felx w-[100%] h-[80vh] ">
+            <Image src="/Slider2.jpg" alt="Imagen fondo" width={1500} height={1000}  className="w-full h-full rounded-lg"/>
           </div>
-          */}
 
-          <div className="felx w-full h-[70vh] object-cover">
-            <Image src="/Scroll_2.jpg" alt="Imagen fondo" width={1000} height={1000} className="w-full h-full rounded-lg"/>
+          <div className="felx w-[100%] h-[80vh] ">
+            <Image src="/Slider3.jpg" alt="Imagen fondo" width={1500} height={1000}  className="w-full h-full rounded-lg"/>
+          </div>
+
+          <div className="felx w-[100%] h-[80vh] ">
+            <Image src="/Slider4.jpg" alt="Imagen fondo" width={1500} height={1000}  className="w-full h-full rounded-lg"/>
+          </div>
+
+          <div className="felx w-[100%] h-[80vh]">
+            <Image src="/Slider6.jpg" alt="Imagen fondo" width={1000} height={1000} className="w-full h-full rounded-lg"/>
+          </div>
+
+          <div className="felx w-[100%] h-[80vh] object-cover">
+            <Image src="/Slider7.jpg" alt="Imagen fondo" width={1000} height={1000} className="w-full h-full rounded-lg"/>
           </div>
           
-          <div className="felx w-full h-[70vh] object-cover">
-            <Image src="/eddylopez10.jpg" alt="Imagen fondo" width={1000} height={1000} className="w-full h-full rounded-lg"/>
-          </div>
-
-          <Link href="https://www.instagram.com/p/DMYxL3WysrM/" target="_blank" className="felx w-full h-[70vh] object-cover">
-            <Image src="/eddylopez11.jpg" alt="Imagen fondo" width={700} height={1500} className="w-full h-full rounded-lg"/>
+          <Link href="https://www.instagram.com/p/DMYxL3WysrM/" target="_blank" className="felx w-full h-[80vh] object-cover">
+            <Image src="/Slider8.png" alt="Imagen fondo" width={700} height={1500} className="w-full h-full rounded-lg"/>
           </Link>
+
+          <div className="felx w-[100%] h-[80vh] object-cover">
+            <Image src="/Slider9.png" alt="Imagen fondo" width={1000} height={1000} className="w-full h-full rounded-lg"/>
+          </div>
 
           
         </Slider>
-        <div className="text-[1.8rem] text-[#2200b8]">
-          <h1>Busca tu propiedad con nosotros</h1>
-        </div>
-        <div className="flex w-full my-2">
-          <div className=" relative w-full flex items-end justify-end">
-            <div className="flex w-[50%] bg-white rounded-full items-start gap-5 justify-center mx-[auto] text-[1.8rem]">
 
-              <div className="relative w-[35%]">
 
-                <button
-                  onClick={() => setIsOpen(!isOpen)}
-                  className=" flex justify-between w-full border border-[#2200b8] p-2 text-left">
-                  Ciudad
+        <div className="absolute flex flex-col items-center justify-center bg-white/0  rounded-lg mt-[30%] w-[70%]">
+          <div className="flex flex-col gap-0  text-[#2200b8] text-center">
+            <h1 className="!text-[4rem] !my-0">Asesoria Inmobiliaria</h1>
+            <p className="text-[1.8rem] font-semibold">Explora propiedades en Republica Dominicana</p>
+          </div>
+          <div className="flex w-full my-2">
+            <div className=" relative w-full flex items-end justify-end">
+              <div className="flex w-[50%] bg-white rounded-full items-start gap-5 justify-center mx-[auto] text-[1.8rem] px-6">
+
+                <div className="relative w-[35%]">
+
+                  <button
+                    onClick={() => setIsOpen(!isOpen)}
+                    className=" flex justify-between w-full   p-2 text-left">
+                    Ciudad
+
+                    {isOpen && (
+                      <FaChevronDown className="rotate-180 text-[#2200b8]"/>
+
+                    ) || (
+                      <FaChevronDown className="text-[#2200b8]"/>
+                    )}
+                    
+                  </button>
 
                   {isOpen && (
-                    <FaChevronDown className="rotate-180 text-[#2200b8]"/>
+                    <div className="absolute bottom-15 flex flex-col gap-4 z-10 w-full rounded-t-lg mt-1 bg-white shadow-lg p-[.5rem]">
+                      <input type="text" className="w-full  px-3 rounded-lg text-[3rem] p-1"/>
+                      <div className=" flex justify-center gap-2 w-full">
+                        <button className="w-[100%] border rounded-lg px-2 cursor-pointer hover:bg-gray-100">Todo</button>
+                        <button className="w-[100%] border rounded-lg px-2 cursor-pointer hover:bg-gray-100">Desmarcar</button>
+                      </div>
 
-                  ) || (
-                    <FaChevronDown className="text-[#2200b8]"/>
+                      <div className="flex flex-col gap-6 scroll-auto h-[12rem] overflow-y-scroll">
+                        <p className="hover:bg-gray-100 cursor-pointer w-full p-2">La Vega</p>
+
+                        <p className="hover:bg-gray-100 cursor-pointer w-full p-2">Santiago</p>
+
+                        <p className="hover:bg-gray-100 cursor-pointer w-full p-2">Puerto Plata</p>
+
+                        <p className="hover:bg-gray-100 cursor-pointer w-full p-2">Bavaro</p>
+
+                        <p className="hover:bg-gray-100 cursor-pointer w-full p-2">Punta Cana</p>
+
+                        <p className="hover:bg-gray-100 cursor-pointer w-full p-2">Santo Domingo</p>
+
+                        <p className="hover:bg-gray-100 cursor-pointer w-full p-2">Moca</p>
+                        
+                      </div>
+                    </div>
                   )}
-                  
-                </button>
-
-                {isOpen && (
-                  <div className="absolute bottom-15 flex flex-col gap-4 z-10 w-full rounded-t-lg mt-1 bg-white shadow-lg p-[.5rem]">
-                    <input type="text" className="w-full border border-[#2200b8] px-3 rounded-lg text-[3rem] p-1"/>
-                    <div className=" flex justify-center gap-2 w-full">
-                      <button className="w-[100%] border rounded-lg px-2 cursor-pointer hover:bg-gray-100">Todo</button>
-                      <button className="w-[100%] border rounded-lg px-2 cursor-pointer hover:bg-gray-100">Desmarcar</button>
-                    </div>
-
-                    <div className="flex flex-col gap-6 scroll-auto h-[12rem] overflow-y-scroll">
-                      <p className="hover:bg-gray-100 cursor-pointer w-full p-2">La Vega</p>
-
-                      <p className="hover:bg-gray-100 cursor-pointer w-full p-2">Santiago</p>
-
-                      <p className="hover:bg-gray-100 cursor-pointer w-full p-2">Puerto Plata</p>
-
-                      <p className="hover:bg-gray-100 cursor-pointer w-full p-2">Bavaro</p>
-
-                      <p className="hover:bg-gray-100 cursor-pointer w-full p-2">Punta Cana</p>
-
-                      <p className="hover:bg-gray-100 cursor-pointer w-full p-2">Santo Domingo</p>
-
-                      <p className="hover:bg-gray-100 cursor-pointer w-full p-2">Moca</p>
-                      
-                    </div>
-                  </div>
-                )}
-              </div>
-
-              <div className="flex items-center w-full gap-2">
-                <div className="flex relative  w-full items-center">
-                    <div className="absolute left-2">
-                      <FaSearch className={inputValue ? 'text-black' : 'text-gray-500'}/>
-                    </div>
-                  
-                  
-                  <input type="text" value={inputValue} onChange={(e) => setInputValue(e.target.value)} placeholder="Buscar Propiedad" className="border border-[#2200b8] pl-12 p-2 w-full"/>
                 </div>
-                
 
-                <button className="border border-[#2200b8] p-2 ">
+                <div className="flex items-center w-full gap-2">
+                  <div className="flex relative  w-full items-center">
+                      <div className="absolute left-2">
+                        <FaSearch className={inputValue ? 'text-black' : 'text-gray-500'}/>
+                      </div>
+                    
+                    
+                    <input type="text" value={inputValue} onChange={(e) => setInputValue(e.target.value)} placeholder="Inmueble" className=" pl-12 p-2 w-full"/>
+                  </div>
+                  
 
-                  Buscar
-                </button>
+                  <button className=" p-2 ">
+
+                    Buscar
+                  </button>
+
+                </div>
 
               </div>
 
             </div>
-
           </div>
         </div>
         
