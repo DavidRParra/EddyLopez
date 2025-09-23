@@ -45,7 +45,7 @@ export default function Home() {
       <div className="flex flex-col items-center  max-w-[100vw] mx-[auto] justify-center">
         
 
-        <Slider {...settings} className="flex w-[90vw] h-[80vh]">
+        <Slider {...settings} className="flex w-[75vw] h-[80vh]">
           <div className="felx w-[100%] h-[80vh] ">
             <Image src="/Slider5.jpg" alt="Imagen fondo" width={1500} height={1000}  className="w-full h-full rounded-lg"/>
           </div>
