@@ -27,7 +27,7 @@ function NavBar(){
                             className="w-[35rem] h-[35rem] rounded-full bg-no-repeat bg-cover mx-auto"
                         />
 
-                        <p className="mt-[2rem] text-center">Lorem ipsum dolor sit amet consectetur adipisicing elit. Numquam sequi distinctio est? Tempora quia maiores libero nam facilis, reprehenderit ad ratione voluptas aut hic. Molestias doloremque facilis reiciendis reprehenderit cum!</p>
+                        <p className="mt-[2rem] text-center"></p>
                     </div>
                 </div>
 
