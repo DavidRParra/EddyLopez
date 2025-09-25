@@ -1,4 +1,5 @@
 import ScaleIn from "@/components/ScaleIn"
+import { FaArrowRight } from "react-icons/fa"
 
 function ContactoPage(){
     return (
@@ -89,11 +90,20 @@ function ContactoPage(){
                             </label>
                             <textarea name="" id="" rows={5} className="flex border rounded-lg py-2 px-4 resize-none"></textarea>
                         </div>
-                        <div className="flex w-full justify-center">
-                            <button className="flex justify-center w-[50%] border border-[#2200b8] rounded-lg py-2 px-4 bg-[#2200b8] text-white">
-                                Enviar
-                            </button>
-                        </div>
+
+                        <div className="flex items-center justify-center text-white">
+                        <button 
+                            className="
+                                flex items-center justify-center gap-4 
+                                mx-auto
+                                border border-transparent rounded-full 
+                                bg-[#2200b8] py-1 px-4 cursor-pointer 
+                                hover:text-[#2200b8] hover:border-[#2200b8] hover:bg-white"
+                            >
+                            Confirmar cita
+                            <FaArrowRight className="border rounded-full p-1"/>
+                        </button>
+                    </div>
                     </div>
                 </ScaleIn>
 

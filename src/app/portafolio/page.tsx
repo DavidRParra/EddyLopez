@@ -6,13 +6,20 @@ const ImageUrls = [
   "/Portafolio3.jpg",
   "/Portafolio4.jpg",
   "/Portafolio5.jpg",
-  "/Portafolio6.png"
+  "/Slider1.jpg",
+  "/Portafolio7.jpg",
+  "/Portafolio8.png",
+  "/Portafolio9.jpg",
+  "/Portafolio10.jpg",
+  "/Portafolio11.png",
+  "/Slider8.png"
+
 ];
 
 export default function Page() {
   
   return (
-    <div className="flex flex-col justify-center w-full h-[80vh]">
+    <div className="flex flex-col justify-center w-full mb-[2rem]">
       <div className="grid grid-cols-3 justify-center items-center w-full h-full px-40">
 
         {ImageUrls.map((url, index) => (
