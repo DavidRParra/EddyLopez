@@ -30,8 +30,8 @@ export default function Page() {
               <p>Planos de Proyecto Terminado</p>
             </div>
           </div>
-        ))
-        }
+        ))}
+
       </div>
     </div>
   );
