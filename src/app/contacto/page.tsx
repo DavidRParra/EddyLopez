@@ -59,7 +59,7 @@ function ContactoPage(){
                                 </label>
 
                                 <select name="tipo-consulta" id="tipo-consulta" className="flex border rounded-lg py-2 px-4">
-                                    <option value="default" hidden>--Sleccione una opcion--</option>
+                                    <option value="default" hidden>--Seleccione una opcion--</option>
                                     <option value="compra">Compra</option>
                                     <option value="alquiler">Alquiler</option>
                                     <option value="venta">Venta</option>
