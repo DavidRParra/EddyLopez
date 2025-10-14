@@ -35,6 +35,7 @@ export default function RootLayout({
         className={`${fuente.className} flex flex-col min-h-screen`}
       >
         <NavBar/>
+        
         <main className="flex-grow">
           {children}
         </main>

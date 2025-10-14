@@ -86,7 +86,7 @@ export default function Home() {
         </Slider>
 
 
-        <div className="absolute flex flex-col items-center justify-center bg-white/0  rounded-lg mt-[30%] w-[70%]">
+        {/*<div className="absolute flex flex-col items-center justify-center bg-white/0  rounded-lg mt-[30%] w-[70%]">
           <div className="flex flex-col gap-0  text-[#2200b8] text-center">
             <h1 className="!text-[4rem] !my-0">Asesoria Inmobiliaria</h1>
             <p className="text-[1.8rem] font-semibold">Explora propiedades en Republica Dominicana</p>
@@ -161,7 +161,7 @@ export default function Home() {
 
             </div>
           </div>
-        </div>
+        </div>*/}
         
       </div>
 

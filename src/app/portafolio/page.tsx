@@ -49,7 +49,8 @@ export default function Page() {
     <div className="flex flex-col justify-center w-full mb-[2rem]">
       <div className="grid grid-cols-3 justify-center items-center w-full h-full px-40">
 
-        {ImageUrls.map((url, index) => (
+        {
+        ImageUrls.map((url, index) => (
           <div className="flex flex-col" key={index}>
             <Image
               onClick={() => (
@@ -73,7 +74,8 @@ export default function Page() {
             
 
           </div>
-        ))}
+        ))
+        }
         <ModalImage isOpen={isModalOpen} onClose={closeModal}>
           <div>
             <FadeIn>

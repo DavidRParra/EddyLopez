@@ -38,7 +38,7 @@ const datosTarjetas: Tarjeta[] = [
 function NosotrosPage(){
     
     return (
-        <div>
+        <div className="mt-[15vh] ml-[5vw">
             <div className="flex flex-col items-center w-full text-[4rem]">
                 <h1 className="font-bold">Acerca de Nosotros</h1>
             </div>
@@ -67,15 +67,6 @@ function NosotrosPage(){
 
                 
 
-            </div>
-
-            <div className="w-full flex justify-center mt-40">
-                <Image
-                    src="/Logo_Info.jpg"
-                    alt="Eddy Lopez Logo"
-                    height={600}
-                    width={600}
-                />
             </div>
         </div>
     );

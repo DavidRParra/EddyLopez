@@ -82,6 +82,10 @@ function NavBar(){
 
                     <span className="w-[.2rem] bg-black"/>
 
+                    <Link href="/nuestro_equipo" className="flex items-center gap-3 border border-transparent text-white !bg-[#2200b8] py-2 rounded-4xl px-4 hover:!bg-white hover:text-[#2200b8] hover:border-[#2200b8]">Nuestro Equipo</Link>
+
+                    <span className="w-[.2rem] bg-black"/>
+
                     <Link href="/contacto" className="flex items-center gap-3  border border-transparent text-white !bg-[#2200b8] py-2 rounded-4xl px-4 hover:!bg-white hover:text-[#2200b8] hover:border-[#2200b8]">Contactanos</Link>
                 </ul>
             </nav>
