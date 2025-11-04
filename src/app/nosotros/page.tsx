@@ -36,39 +36,46 @@ const datosTarjetas: Tarjeta[] = [
 ];
 
 function NosotrosPage(){
+    const mostrar = "CLIENTE";
     
     return (
-        <div className="mt-[15vh] ml-[5vw">
-            <div className="flex flex-col items-center w-full text-[4rem]">
-                <h1 className="font-bold">Acerca de Nosotros</h1>
-            </div>
-            
-            <div className="flex justify-center gap-8 w-full ">
-                {datosTarjetas.map((tarjeta, index) => (
-                    <div 
-                        key={index}
-                        
-                    >
-                        <Link href={tarjeta.url} target="_blank" className="flex flex-col text-center gap-4 text-[1.5rem] w-full font-bold cursor-pointer">
-                            <Image 
-                                src={tarjeta.imagen} 
-                                alt={tarjeta.texto}
-                                width={300}
-                                height={300}
-                                className="flex w-[10rem] rounded-full"
-                            />
-
-                            <div>
-                                <p>{tarjeta.texto}</p>
-                            </div>
-                        </Link>
-                    </div>
-                ))}
-
-                
-
-            </div>
+      <div className="flex flex-col items-center mt-[15vh] ml-[5vw">
+        <div className="flex flex-col items-center w-full text-[4rem]">
+            <h1 className="font-bold">Acerca de Nosotros</h1>
         </div>
+
+        <div className="w-[60rem] mb-[4rem]">
+          <p className="text-[2rem] text-center"></p>
+        </div>
+        
+        <div className="flex justify-center gap-8 w-full ">
+          {datosTarjetas.map((tarjeta, index) => (
+            <div 
+                key={index}
+                
+            >
+                <Link href={tarjeta.url} target="_blank" className="flex flex-col text-center gap-4 text-[1.5rem] w-full font-bold cursor-pointer">
+                    <Image 
+                        src={tarjeta.imagen} 
+                        alt={tarjeta.texto}
+                        width={300}
+                        height={300}
+                        className="flex w-[10rem] rounded-full"
+                    />
+
+                    <div>
+                        <p>{tarjeta.texto}</p>
+                    </div>
+                </Link>
+            </div>
+          ))}
+
+            
+
+        </div>
+
+        
+      </div>
     );
 
 }

@@ -33,7 +33,7 @@ const ImageRecurso = [
   "#",
   "#",
   "#",
-  "/PlanosVillaBeato.pdf",
+  "#",
   "/Video1.mp4"
 ];
 
@@ -68,7 +68,7 @@ export default function Page() {
             />
 
             <div className="text-center text-[2.1rem] font-semibold">
-              <p>Planos de Proyecto Terminado</p>
+              <p>Imagenes del Proyecto Terminado</p>
             </div>
 
             

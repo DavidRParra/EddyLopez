@@ -50,6 +50,7 @@ export async function POST(request: Request) {
         "ACTIVE", 
         "PAGE", 
         2])
+        return NextResponse.json({message: 'Formulario guardado con exito'}, {status : 200});
     } catch(error) {
         return NextResponse.json({error: 'Error al procesar la solicitud'}, {status : 500});
     }

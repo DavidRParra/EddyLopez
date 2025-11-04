@@ -3,6 +3,7 @@
 import React, { useState } from "react"
 import ScaleIn from "@/components/ScaleIn"
 import { FaArrowRight } from "react-icons/fa"
+import ModalImage from "@/components/modals/modal-image";
 
 interface Appointment{
     appointmentDtlId?: number
@@ -22,9 +23,22 @@ interface Appointment{
     lastUpdateDate?: Date;
 }
 
+function MessageAlert(){
+    
+    
+}
+
+
 
 
 function ContactoPage(){
+    const [isModalOpen, setIsModalOpen] = useState(false);
+    const [modalMessage, setModalMessage] = useState("Error al enviar el formulario. Por favor, intenta de nuevo.");
+    const [confirm, setConfirm] = useState(false);
+
+    const openModal = () => setIsModalOpen(true);
+    const closeModal = () => setIsModalOpen(false);
+
     const [formData, setFormData] = useState({
         firstName : "",
         lastName : "",
@@ -41,16 +55,22 @@ function ContactoPage(){
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault()
-
-        const res = await fetch("/apis/guardar_formulario", {
-            method: "POST",
-            headers: {"Content-Type": "application/json"},
-            body: JSON.stringify(formData),
-        })
-
-        const data = await res.json()
-        alert(data.message)
+        try{
+            const res = await fetch("/apis/guardar_formulario", {
+                method: "POST",
+                headers: {"Content-Type": "application/json"},
+                body: JSON.stringify(formData),
+            })
+            const data = await res.json()
+            setModalMessage('Formulario enviado con exito');
+            setConfirm(true);
+        } catch (error) {
+            setModalMessage('Error al enviar el formulario. Por favor, intenta de nuevo.\n' + error);
+            setConfirm(false);
+        }
     }
+
+    
 
     
 
@@ -188,6 +208,11 @@ function ContactoPage(){
                                 border border-transparent rounded-full 
                                 bg-[#2200b8] py-1 px-4 cursor-pointer 
                                 hover:text-[#2200b8] hover:border-[#2200b8] hover:bg-white"
+
+                                type="submit"
+                                onClick={() => (
+                                    openModal()
+                                )}
                             >
                             Confirmar cita
                             <FaArrowRight className="border rounded-full p-1"/>
@@ -195,6 +220,27 @@ function ContactoPage(){
                     </div>
                     </div>
                 </ScaleIn>
+                <ModalImage isOpen={isModalOpen} onClose={closeModal}>
+                    <div className="flex flex-col p-10 justify-center items-center bg-white rounded-lg gap-[2rem]">
+                        <p className="text-[1.8rem] font-bold">
+                            {modalMessage}
+                        </p>
+
+                        <button
+                            className="mt-5 bg-[#2200b8] text-white py-2 px-4 rounded-lg hover:bg-[#150078]"
+                            onClick={() => {
+                                closeModal();
+                                if(confirm){
+                                     window.location.reload();
+                                }
+                            }}
+                        >
+                            Ok
+                        </button>
+                    </div>
+                    
+                </ModalImage>
+                
 
             </form>
             
