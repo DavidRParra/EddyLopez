@@ -62,10 +62,10 @@ function ContactoPage(){
                 body: JSON.stringify(formData),
             })
             const data = await res.json()
-            setModalMessage('Formulario enviado con exito');
+            setModalMessage('Cita creada con exito, Nuestra oficina se pondra en contacto contigo pronto.');
             setConfirm(true);
         } catch (error) {
-            setModalMessage('Error al enviar el formulario. Por favor, intenta de nuevo.\n' + error);
+            setModalMessage('Error al Crear la cita. Por favor, intenta de nuevo.\n' + error);
             setConfirm(false);
         }
     }
