@@ -21,13 +21,13 @@ function NavBar(){
                 {/* Descripcion de Eddy Lopez */}
                 <div className="flex group">
                     <Image src="/LOGO.png" alt="Eddy Lopez Profile" width={900} height={500} className="w-[28rem] h-[8rem]  group"></Image>
-                    <div className="w-[70rem] absolute flex flex-col top-40 left-0 scale-0 group-hover:block group-hover:scale-100 z-30 bg-[#ffd500] rounded-4xl px-[6rem] py-[3rem]">
+                    <div className="w-[70rem] absolute flex flex-col top-40 left-0 scale-0 group-hover:block group-hover:scale-100 z-30 bg-white rounded-4xl px-[6rem] py-[3rem]">
                         <div
                             style={{backgroundImage : "url('/EddyLopezProfile2.png')"}}
                             className="w-[35rem] h-[35rem] rounded-full bg-no-repeat bg-cover mx-auto"
                         />
 
-                        <p className="mt-[2rem] text-center"></p>
+                        <p className="mt-[2rem] text-center text-[#002861]">Con una trayectoria de más de tres décadas en el sector inmobiliario, el arquitecto Eddy López se ha consolidado como un referente por su profesionalismo, visión estratégica y compromiso inquebrantable con la excelencia.</p>
                     </div>
                 </div>
 

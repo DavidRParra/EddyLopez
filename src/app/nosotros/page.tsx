@@ -46,20 +46,20 @@ function NosotrosPage(){
             <h1 className="font-bold">Acerca de Nosotros</h1>
         </div>
 
-        <div className="flex flex-col w-[60%] mb-[4rem] items-center gap-6 text-[1.6rem] text-white bg-[#002861] p-9 rounded-[50] mt-8">
-          <p className="">Con más de 30 años de trayectoria en el sector inmobiliario, el arquitecto Eddy López se distingue por su profesionalismo, visión estratégica y compromiso constante con la excelencia.</p>
+        <div className="flex flex-col w-full mb-[4rem] items-center gap-6 text-[1.3rem] text-white bg-[#002861] p-9 rounded-[50] mt-8 font-bold">
+          <p className="text-center">Con una trayectoria de más de tres décadas en el sector inmobiliario, el arquitecto Eddy López se ha consolidado como un referente por su profesionalismo, visión estratégica y compromiso inquebrantable con la excelencia.</p>
 
-          <p>Desde sus inicios en la ciudad de La Vega, ha liderado proyectos arquitectónicos y de inversión con un enfoque integral que combina diseño, construcción y asesoría personalizada, alcanzando más de 2,000 clientes satisfechos en todo el país.</p>
+          <p className="text-center">Desde sus inicios en la ciudad de La Vega, ha liderado con éxito numerosos proyectos arquitectónicos y de inversión, adoptando un enfoque integral que articula diseño, construcción y asesoría personalizada. Esta metodología le ha permitido atender a más de 2,000 clientes en todo el territorio nacional.</p>
 
-          <p>Su especialización en diseño y desarrollo de proyectos residenciales y turísticos de alto rendimiento le ha permitido crear espacios que unen elegancia, funcionalidad y durabilidad, adaptándose a las demandas del mercado moderno.</p>
+          <p className="text-center">Especializado en el diseño y desarrollo de proyectos residenciales y turísticos de alto rendimiento, el Arq. López ha creado espacios que armonizan elegancia, funcionalidad y durabilidad, respondiendo eficazmente a las exigencias del mercado contemporáneo.</p>
 
-          <p>Actualmente, el Arq. López impulsa proyectos y oportunidades de inversión en todo el territorio nacional, con especial presencia en las zonas costeras, ofreciendo a sus clientes alternativas exclusivas, de alta rentabilidad y valor estético garantizado.</p>
+          <p className="text-center">Actualmente, impulsa iniciativas de inversión en diversas regiones del país, con especial énfasis en zonas costeras, ofreciendo propuestas exclusivas que destacan por su alta rentabilidad y valor estético garantizado.</p>
 
-          <p>Su filosofía profesional se sostiene en tres pilares fundamentales: honestidad, innovación y resultados sostenibles, principios que guían cada decisión y cada espacio que cre</p>
+          <p className="text-center">Su ejercicio profesional se fundamenta en tres pilares esenciales: honestidad, innovación y resultados sostenibles, principios que orientan cada decisión y se reflejan en cada proyecto que desarrolla.</p>
 
         </div>
 
-        <div className="flex w-[25%] justify-center mb-[6rem] gap-8">
+        <div className="flex w-[25%] justify-center mb-[1rem] gap-8">
             <div className="flex flex-col w-full gap-3">
                 <div
                     
