@@ -59,17 +59,17 @@ function NavBar(){
                     <li className="relative group">
                         <Link href="#" className="flex items-center gap-3 border border-transparent text-white !bg-[#002861] py-2 rounded-4xl px-4  group-hover:!bg-white group-hover:text-[#002861] group-hover:border-[#002861]">
                             Inmuebles
-                            <FaChevronDown className="hidden h-[2rem] w-[2rem] transform group-hover:rotate-180 transition-transform duration-450 lg:block" />
+                            {/*<FaChevronDown className="hidden h-[2rem] w-[2rem] transform group-hover:rotate-180 transition-transform duration-450 lg:block" />*/}
                         </Link>
 
-                        <ul className="lg:absolute lg:hidden group-hover:block bg-gray-100 left-0 top-12 rounded-lg z-10">
+                        {/*<ul className="lg:absolute lg:hidden group-hover:block bg-gray-100 left-0 top-12 rounded-lg z-10">
                             <Link href="#" ><li className="hover:bg-[#002861] hover:text-[#ffffff] px-4 py-2 rounded-lg">Casas</li></Link>
                             <Link href="#" ><li className="hover:bg-[#002861] hover:text-[#ffffff] px-4 py-2 rounded-lg">Apartamentos</li></Link>
                             <Link href="#" ><li className="hover:bg-[#002861] hover:text-[#ffffff] px-4 py-2 rounded-lg">Edificios</li></Link>
                             <Link href="#" ><li className="hover:bg-[#002861] hover:text-[#ffffff] px-4 py-2 rounded-lg">Solares</li></Link>
                             <Link href="#" ><li className="hover:bg-[#002861] hover:text-[#ffffff] px-4 py-2 rounded-lg">Fincas</li></Link>
 
-                        </ul>
+                        </ul>*/}
                     </li>
 
                     
@@ -82,7 +82,7 @@ function NavBar(){
 
                     
 
-                    <Link href="/nuestro_equipo" className="flex items-center gap-3 border border-transparent text-white !bg-[#002861] py-2 rounded-4xl px-4 hover:!bg-white hover:text-[#002861] hover:border-[#002861]">Nuestro Equipo</Link>
+                    {/*<Link href="/nuestro_equipo" className="flex items-center gap-3 border border-transparent text-white !bg-[#002861] py-2 rounded-4xl px-4 hover:!bg-white hover:text-[#002861] hover:border-[#002861]">Nuestro Equipo</Link>*/}
 
                     
 

@@ -47,27 +47,27 @@ export default function Home() {
 
         <Slider {...settings} className="flex w-[75vw] h-[80vh]">
           <div className="felx w-[100%] h-[80vh] ">
-            <Image src="/Slider5.jpg" alt="Imagen fondo" width={1500} height={1000}  className="w-full h-full rounded-lg"/>
+            <Image src="/Slider10.png" alt="Imagen fondo" width={1500} height={1000}  className="w-full h-full rounded-lg"/>
           </div>
 
           <div className="felx w-[100%] h-[80vh] ">
-            <Image src="/Slider1.jpg" alt="Imagen fondo" width={1500} height={1000}  className="w-full h-full rounded-lg"/>
+            <Image src="/Slider11.png" alt="Imagen fondo" width={1500} height={1000}  className="w-full h-full rounded-lg"/>
           </div>
 
           <div className="felx w-[100%] h-[80vh] ">
-            <Image src="/Slider2.jpg" alt="Imagen fondo" width={1500} height={1000}  className="w-full h-full rounded-lg"/>
+            <Image src="/Slider12.png" alt="Imagen fondo" width={1500} height={1000}  className="w-full h-full rounded-lg"/>
           </div>
 
           <div className="felx w-[100%] h-[80vh] ">
-            <Image src="/Slider3.jpg" alt="Imagen fondo" width={1500} height={1000}  className="w-full h-full rounded-lg"/>
+            <Image src="/Slider13.jpeg" alt="Imagen fondo" width={1500} height={1000}  className="w-full h-full rounded-lg"/>
           </div>
 
           <div className="felx w-[100%] h-[80vh] ">
-            <Image src="/Slider4.jpg" alt="Imagen fondo" width={1500} height={1000}  className="w-full h-full rounded-lg"/>
+            <Image src="/Slider14.jpg" alt="Imagen fondo" width={1500} height={1000}  className="w-full h-full rounded-lg"/>
           </div>
 
           <div className="felx w-[100%] h-[80vh]">
-            <Image src="/Slider6.jpg" alt="Imagen fondo" width={1000} height={1000} className="w-full h-full rounded-lg"/>
+            <Image src="/Slider15.png" alt="Imagen fondo" width={1000} height={1000} className="w-full h-full rounded-lg"/>
           </div>
 
           <div className="felx w-[100%] h-[80vh] object-cover">
@@ -86,14 +86,14 @@ export default function Home() {
         </Slider>
 
 
-        {/*<div className="absolute flex flex-col items-center justify-center bg-white/0  rounded-lg mt-[30%] w-[70%]">
-          <div className="flex flex-col gap-0  text-[#2200b8] text-center">
+        {<div className=" flex flex-col items-center justify-center rounded-[30] mt-15 mb-15 p-5 bg-[#002861]">
+          <div className="flex flex-col gap-0  text-white text-center">
             <h1 className="!text-[4rem] !my-0">Asesoria Inmobiliaria</h1>
             <p className="text-[1.8rem] font-semibold">Explora propiedades en Republica Dominicana</p>
           </div>
-          <div className="flex w-full my-2">
-            <div className=" relative w-full flex items-end justify-end">
-              <div className="flex w-[50%] bg-white rounded-full items-start gap-5 justify-center mx-[auto] text-[1.8rem] px-6">
+          <div className="flex my-2">
+            <div className="relative flex items-end justify-end">
+              <div className="flex bg-white w-[70rem] rounded-full items-start gap-5 justify-center mx-[auto] text-[1.8rem] px-6">
 
                 <div className="relative w-[35%]">
 
@@ -113,11 +113,11 @@ export default function Home() {
 
                   {isOpen && (
                     <div className="absolute bottom-15 flex flex-col gap-4 z-10 w-full rounded-t-lg mt-1 bg-white shadow-lg p-[.5rem]">
-                      <input type="text" className="w-full  px-3 rounded-lg text-[3rem] p-1"/>
-                      <div className=" flex justify-center gap-2 w-full">
+                      <input type="text" className="w-full  px-3 rounded-lg text-[3rem] p-1 bg-gray-300 border border-gray-600"/>
+                      {/*<div className=" flex justify-center gap-2 w-full">
                         <button className="w-[100%] border rounded-lg px-2 cursor-pointer hover:bg-gray-100">Todo</button>
                         <button className="w-[100%] border rounded-lg px-2 cursor-pointer hover:bg-gray-100">Desmarcar</button>
-                      </div>
+                      </div>*/}
 
                       <div className="flex flex-col gap-6 scroll-auto h-[12rem] overflow-y-scroll">
                         <p className="hover:bg-gray-100 cursor-pointer w-full p-2">La Vega</p>
@@ -161,7 +161,7 @@ export default function Home() {
 
             </div>
           </div>
-        </div>*/}
+        </div>}
         
       </div>
 
