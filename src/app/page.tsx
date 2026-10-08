@@ -2,14 +2,13 @@
 import Image from "next/image";
 import Link from "next/link";
 import { useState } from "react";
-import {FaChevronDown, FaSearch} from "react-icons/fa";
+import { FaChevronDown, FaSearch } from "react-icons/fa";
 import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 
 export default function Home() {
-
-  const [isOpen, setIsOpen] = useState(false)
+  const [isOpen, setIsOpen] = useState(false);
   const [inputValue, setInputValue] = useState('');
 
   const settings = {
@@ -24,150 +23,107 @@ export default function Home() {
   };
 
   return (
-    <div className="mt-3">
-
-      {/*<div 
-      className=" z-[-1] h-[100vh] bg-cover bg-center bg-black/25 bg-blend-overlay flex  flex-col items-center justify-center lg:justify-en" 
-      style={{backgroundImage : `url('/eddylopez9.jpg')`}}>
-
+    <div className="mt-3 overflow-x-hidden">
+      <div className="flex flex-col items-center max-w-[100vw] mx-auto justify-center px-4 md:px-0">
         
-        <h1 className="text-white !text-[4rem] font-bold">Especialistas en proyectos arquitectónicos a medida</h1>
-        
+        {/* CARRUSEL RESPONSIVE */}
+        <div className="w-[92vw] md:w-[75vw] my-4">
+          <Slider {...settings} className="w-full">
+            <div className="w-full h-[30vh] sm:h-[50vh] md:h-[80vh]">
+              <Image src="/Slider10.png" alt="Imagen fondo" width={1500} height={1000} className="w-full h-full object-cover rounded-lg" />
+            </div>
+            <div className="w-full h-[30vh] sm:h-[50vh] md:h-[80vh]">
+              <Image src="/Slider11.png" alt="Imagen fondo" width={1500} height={1000} className="w-full h-full object-cover rounded-lg" />
+            </div>
+            <div className="w-full h-[30vh] sm:h-[50vh] md:h-[80vh]">
+              <Image src="/Slider12.png" alt="Imagen fondo" width={1500} height={1000} className="w-full h-full object-cover rounded-lg" />
+            </div>
+            <div className="w-full h-[30vh] sm:h-[50vh] md:h-[80vh]">
+              <Image src="/Slider13.jpeg" alt="Imagen fondo" width={1500} height={1000} className="w-full h-full object-cover rounded-lg" />
+            </div>
+            <div className="w-full h-[30vh] sm:h-[50vh] md:h-[80vh]">
+              <Image src="/Slider14.jpg" alt="Imagen fondo" width={1500} height={1000} className="w-full h-full object-cover rounded-lg" />
+            </div>
+            <div className="w-full h-[30vh] sm:h-[50vh] md:h-[80vh]">
+              <Image src="/Slider15.png" alt="Imagen fondo" width={1000} height={1000} className="w-full h-full object-cover rounded-lg" />
+            </div>
+            <div className="w-full h-[30vh] sm:h-[50vh] md:h-[80vh]">
+              <Image src="/Slider7.jpg" alt="Imagen fondo" width={1000} height={1000} className="w-full h-full object-cover rounded-lg" />
+            </div>
+            <Link href="https://www.instagram.com/p/DMYxL3WysrM/" target="_blank" className="w-full h-[30vh] sm:h-[50vh] md:h-[80vh] block">
+              <Image src="/Slider8.png" alt="Imagen fondo" width={700} height={1500} className="w-full h-full object-cover rounded-lg" />
+            </Link>
+            <div className="w-full h-[30vh] sm:h-[50vh] md:h-[80vh]">
+              <Image src="/Slider9.png" alt="Imagen fondo" width={1000} height={1000} className="w-full h-full object-cover rounded-lg" />
+            </div>
+          </Slider>
+        </div>
 
-        <p className="text-white text-[2rem] my-3">Explora algunos de nuestros proyectos</p>
-
-        
-
-    
-
-      </div>
-*/}
-      <div className="flex flex-col items-center  max-w-[100vw] mx-[auto] justify-center">
-        
-
-        <Slider {...settings} className="flex w-[75vw] h-[80vh]">
-          <div className="felx w-[100%] h-[80vh] ">
-            <Image src="/Slider10.png" alt="Imagen fondo" width={1500} height={1000}  className="w-full h-full rounded-lg"/>
+        {/* SECCIÓN DE ASESORÍA INMOBILIARIA */}
+        <div className="w-[92vw] md:w-[75vw] flex flex-col items-center justify-center rounded-3xl mt-10 mb-15 p-6 md:p-8 bg-[#002861] text-white overflow-visible relative">
+          <div className="flex flex-col gap-2 text-center mb-6">
+            <h1 className="text-[2.5rem] md:text-[4rem] font-bold leading-tight">Asesoria Inmobiliaria</h1>
+            <p className="text-[1.5rem] md:text-[1.8rem] font-semibold text-gray-200">Explora propiedades en Republica Dominicana</p>
           </div>
 
-          <div className="felx w-[100%] h-[80vh] ">
-            <Image src="/Slider11.png" alt="Imagen fondo" width={1500} height={1000}  className="w-full h-full rounded-lg"/>
-          </div>
+          <div className="w-full flex justify-center relative">
+            <div className="flex flex-col md:flex-row bg-white w-full md:w-[70rem] rounded-2xl md:rounded-full items-center gap-4 justify-center text-[1.6rem] p-4 md:px-6 md:py-3 text-black relative">
 
-          <div className="felx w-[100%] h-[80vh] ">
-            <Image src="/Slider12.png" alt="Imagen fondo" width={1500} height={1000}  className="w-full h-full rounded-lg"/>
-          </div>
+              {/* Selector de Ciudad */}
+              <div className="relative w-full md:w-[35%] border-b md:border-b-0 md:border-r border-gray-300 pb-2 md:pb-0">
+                <button
+                  onClick={() => setIsOpen(!isOpen)}
+                  className="flex justify-between items-center w-full p-2 text-left cursor-pointer"
+                >
+                  <span>Ciudad</span>
+                  <FaChevronDown className={`text-[#002861] transition-transform duration-300 ${isOpen ? "rotate-180" : ""}`} />
+                </button>
 
-          <div className="felx w-[100%] h-[80vh] ">
-            <Image src="/Slider13.jpeg" alt="Imagen fondo" width={1500} height={1000}  className="w-full h-full rounded-lg"/>
-          </div>
-
-          <div className="felx w-[100%] h-[80vh] ">
-            <Image src="/Slider14.jpg" alt="Imagen fondo" width={1500} height={1000}  className="w-full h-full rounded-lg"/>
-          </div>
-
-          <div className="felx w-[100%] h-[80vh]">
-            <Image src="/Slider15.png" alt="Imagen fondo" width={1000} height={1000} className="w-full h-full rounded-lg"/>
-          </div>
-
-          <div className="felx w-[100%] h-[80vh] object-cover">
-            <Image src="/Slider7.jpg" alt="Imagen fondo" width={1000} height={1000} className="w-full h-full rounded-lg"/>
-          </div>
-          
-          <Link href="https://www.instagram.com/p/DMYxL3WysrM/" target="_blank" className="felx w-full h-[80vh] object-cover">
-            <Image src="/Slider8.png" alt="Imagen fondo" width={700} height={1500} className="w-full h-full rounded-lg"/>
-          </Link>
-
-          <div className="felx w-[100%] h-[80vh] object-cover">
-            <Image src="/Slider9.png" alt="Imagen fondo" width={1000} height={1000} className="w-full h-full rounded-lg"/>
-          </div>
-
-          
-        </Slider>
-
-
-        {<div className=" flex flex-col items-center justify-center rounded-[30] mt-15 mb-15 p-5 bg-[#002861]">
-          <div className="flex flex-col gap-0  text-white text-center">
-            <h1 className="!text-[4rem] !my-0">Asesoria Inmobiliaria</h1>
-            <p className="text-[1.8rem] font-semibold">Explora propiedades en Republica Dominicana</p>
-          </div>
-          <div className="flex my-2">
-            <div className="relative flex items-end justify-end">
-              <div className="flex bg-white w-[70rem] rounded-full items-start gap-5 justify-center mx-[auto] text-[1.8rem] px-6">
-
-                <div className="relative w-[35%]">
-
-                  <button
-                    onClick={() => setIsOpen(!isOpen)}
-                    className=" flex justify-between w-full   p-2 text-left">
-                    Ciudad
-
-                    {isOpen && (
-                      <FaChevronDown className="rotate-180 text-[#2200b8]"/>
-
-                    ) || (
-                      <FaChevronDown className="text-[#2200b8]"/>
-                    )}
-                    
-                  </button>
-
-                  {isOpen && (
-                    <div className="absolute bottom-15 flex flex-col gap-4 z-10 w-full rounded-t-lg mt-1 bg-white shadow-lg p-[.5rem]">
-                      <input type="text" className="w-full  px-3 rounded-lg text-[3rem] p-1 bg-gray-300 border border-gray-600"/>
-                      {/*<div className=" flex justify-center gap-2 w-full">
-                        <button className="w-[100%] border rounded-lg px-2 cursor-pointer hover:bg-gray-100">Todo</button>
-                        <button className="w-[100%] border rounded-lg px-2 cursor-pointer hover:bg-gray-100">Desmarcar</button>
-                      </div>*/}
-
-                      <div className="flex flex-col gap-6 scroll-auto h-[12rem] overflow-y-scroll">
-                        <p className="hover:bg-gray-100 cursor-pointer w-full p-2">La Vega</p>
-
-                        <p className="hover:bg-gray-100 cursor-pointer w-full p-2">Santiago</p>
-
-                        <p className="hover:bg-gray-100 cursor-pointer w-full p-2">Puerto Plata</p>
-
-                        <p className="hover:bg-gray-100 cursor-pointer w-full p-2">Bavaro</p>
-
-                        <p className="hover:bg-gray-100 cursor-pointer w-full p-2">Punta Cana</p>
-
-                        <p className="hover:bg-gray-100 cursor-pointer w-full p-2">Santo Domingo</p>
-
-                        <p className="hover:bg-gray-100 cursor-pointer w-full p-2">Moca</p>
-                        
-                      </div>
+                {isOpen && (
+                  <div className="absolute top-full left-0 mt-2 flex flex-col gap-2 z-50 w-full rounded-xl bg-white shadow-2xl border border-gray-200 p-2">
+                    <input 
+                      type="text" 
+                      placeholder="Buscar ciudad..." 
+                      className="w-full px-3 py-1.5 rounded-lg text-[1.4rem] bg-gray-100 border border-gray-300 outline-none" 
+                    />
+                    <div className="flex flex-col gap-1 max-h-[14rem] overflow-y-auto text-[1.5rem]">
+                      <p onClick={() => setIsOpen(false)} className="hover:bg-gray-100 cursor-pointer w-full p-2 rounded-lg">La Vega</p>
+                      <p onClick={() => setIsOpen(false)} className="hover:bg-gray-100 cursor-pointer w-full p-2 rounded-lg">Santiago</p>
+                      <p onClick={() => setIsOpen(false)} className="hover:bg-gray-100 cursor-pointer w-full p-2 rounded-lg">Puerto Plata</p>
+                      <p onClick={() => setIsOpen(false)} className="hover:bg-gray-100 cursor-pointer w-full p-2 rounded-lg">Bavaro</p>
+                      <p onClick={() => setIsOpen(false)} className="hover:bg-gray-100 cursor-pointer w-full p-2 rounded-lg">Punta Cana</p>
+                      <p onClick={() => setIsOpen(false)} className="hover:bg-gray-100 cursor-pointer w-full p-2 rounded-lg">Santo Domingo</p>
+                      <p onClick={() => setIsOpen(false)} className="hover:bg-gray-100 cursor-pointer w-full p-2 rounded-lg">Moca</p>
                     </div>
-                  )}
-                </div>
-
-                <div className="flex items-center w-full gap-2">
-                  <div className="flex relative  w-full items-center">
-                      <div className="absolute left-2">
-                        <FaSearch className={inputValue ? 'text-black' : 'text-gray-500'}/>
-                      </div>
-                    
-                    
-                    <input type="text" value={inputValue} onChange={(e) => setInputValue(e.target.value)} placeholder="Inmueble" className=" pl-12 p-2 w-full"/>
                   </div>
-                  
+                )}
+              </div>
 
-                  <button className=" p-2 ">
-
-                    Buscar
-                  </button>
-
+              {/* Barra de Búsqueda de Inmuebles */}
+              <div className="flex flex-col md:flex-row items-center w-full gap-3">
+                <div className="flex relative w-full items-center">
+                  <div className="absolute left-3 text-gray-500">
+                    <FaSearch className={inputValue ? 'text-black' : 'text-gray-500'} />
+                  </div>
+                  <input 
+                    type="text" 
+                    value={inputValue} 
+                    onChange={(e) => setInputValue(e.target.value)} 
+                    placeholder="Inmueble" 
+                    className="pl-10 pr-4 py-2 w-full text-[1.5rem] outline-none" 
+                  />
                 </div>
 
+                <button className="w-full md:w-auto bg-[#002861] text-white px-6 py-2 rounded-xl md:rounded-full font-semibold hover:bg-[#001d44] transition-colors cursor-pointer">
+                  Buscar
+                </button>
               </div>
 
             </div>
           </div>
-        </div>}
-        
+        </div>
+
       </div>
-
-      
-
-
     </div>
   );
 }

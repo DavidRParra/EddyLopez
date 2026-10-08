@@ -1,14 +1,15 @@
 "use client";
+
 import Image from "next/image";
-import { use, useState } from "react";
+import { useState } from "react";
 import { FaFile } from "react-icons/fa";
 import Link from "next/link";
 import ModalImage from "@/components/modals/modal-image";
 import FadeIn from "@/components/ScaleIn";
 
 const ImageUrls = [
-  "/Portafolio1.jpg", 
-  "/Portafolio2.png", 
+  "/Portafolio1.jpg",
+  "/Portafolio2.png",
   "/Portafolio3.jpg",
   "/Portafolio4.jpg",
   "/Portafolio5.jpg",
@@ -18,8 +19,7 @@ const ImageUrls = [
   "/Portafolio9.jpg",
   "/Portafolio10.jpg",
   "/Portafolio11.png",
-  "/Slider8.png"
-
+  "/Slider8.png",
 ];
 
 const ImageRecurso = [
@@ -34,7 +34,7 @@ const ImageRecurso = [
   "#",
   "#",
   "#",
-  "/Video1.mp4"
+  "/Video1.mp4",
 ];
 
 export default function Page() {
@@ -46,65 +46,229 @@ export default function Page() {
   const closeModal = () => setIsModalOpen(false);
 
   return (
-    <div className="flex flex-col justify-center w-full mb-[2rem]">
-      <div className="grid grid-cols-3 justify-center items-center w-full h-full px-40">
+    <main className="w-full min-h-screen px-4 py-8 sm:px-6 md:px-8 lg:px-10 xl:px-12">
+      
+      {/* GRID */}
+      <div
+        className="
+          mx-auto
+          w-full
+          max-w-[1400px]
 
-        {
-        ImageUrls.map((url, index) => (
-          <div className="flex flex-col" key={index}>
-            <Image
-              onClick={() => (
-                openModal(),
-                setModalUrl(url),
-                setModalRecurso(index)
-              )
-              }
-              key={index}
-              src={url}
-              alt={`Image ${index + 1}`}
-              width={800}
-              height={600}
-              className="mx-auto my-4 w-[55rem] h-[30rem] rounded-2xl border border-black hover:scale-105 transition-transform duration-300 object-cover"
-            />
+          grid
+          grid-cols-1
+          sm:grid-cols-2
+          lg:grid-cols-3
 
-            <div className="text-center text-[2.1rem] font-semibold">
-              <p>Imagenes del Proyecto Terminado</p>
+          gap-5
+          sm:gap-6
+          lg:gap-7
+        "
+      >
+        {ImageUrls.map((url, index) => (
+          <article
+            key={index}
+            onClick={() => {
+              setModalUrl(url);
+              setModalRecurso(index);
+              openModal();
+            }}
+            className="
+              group
+              w-full
+              overflow-hidden
+              rounded-xl
+              bg-white
+              border
+              border-gray-200
+              shadow-sm
+              cursor-pointer
+
+              transition-all
+              duration-300
+              hover:-translate-y-1
+              hover:shadow-xl
+            "
+          >
+            {/* IMAGEN */}
+            <div
+              className="
+                relative
+                w-full
+                aspect-[16/10]
+                overflow-hidden
+                bg-gray-100
+              "
+            >
+              <Image
+                src={url}
+                alt={`Proyecto ${index + 1}`}
+                fill
+                sizes="
+                  (max-width: 640px) 100vw,
+                  (max-width: 1024px) 50vw,
+                  33vw
+                "
+                className="
+                  object-cover
+                  transition-transform
+                  duration-500
+                  group-hover:scale-105
+                "
+              />
             </div>
 
-            
+            {/* TEXTO */}
+            <div
+              className="
+                px-3
+                py-3
+                sm:px-4
+                sm:py-4
+                text-center
+              "
+            >
+              <p
+                className="
+                  text-sm
+                  sm:text-base
+                  lg:text-lg
+                  font-semibold
+                  leading-tight
+                  text-[#002861]
+                "
+              >
+                Imágenes del Proyecto Terminado
+              </p>
+            </div>
+          </article>
+        ))}
 
-          </div>
-        ))
-        }
-        <ModalImage isOpen={isModalOpen} onClose={closeModal}>
-          <div>
+        {/* MODAL */}
+        <ModalImage
+          isOpen={isModalOpen}
+          onClose={closeModal}
+        >
+          <div
+            className="
+              relative
+              flex
+              min-h-full
+              w-full
+              items-center
+              justify-center
+              px-3
+              sm:px-6
+              py-6
+            "
+          >
             <FadeIn>
-              <Image
-                src={modalUrl}
-                alt={'Image' }
-                width={1200}
-                height={900}
-                className="mx-auto my-4 w-[120rem] h-[70rem] rounded-2xl border border-black object-cover"
-              />
-              
+              <div
+                className="
+                  relative
+                  flex
+                  max-h-[85vh]
+                  max-w-[95vw]
+                  items-center
+                  justify-center
+                "
+              >
+                <Image
+                  src={modalUrl}
+                  alt="Vista ampliada del proyecto"
+                  width={1600}
+                  height={1000}
+                  className="
+                    max-h-[80vh]
+                    max-w-full
+                    w-auto
+                    rounded-xl
+                    object-contain
+                    border
+                    border-black
+                  "
+                />
+              </div>
 
-                <Link 
-                  href={ImageRecurso[modalRecurso]} 
-                  target="_blank"
-                  className="group"
+              {/* BOTÓN VER MÁS */}
+              <Link
+                href={ImageRecurso[modalRecurso]}
+                target="_blank"
+                className="group"
+              >
+                <div
+                  className="
+                    fixed
+                    bottom-4
+                    right-4
+
+                    sm:bottom-6
+                    sm:right-6
+
+                    md:bottom-8
+                    md:right-8
+
+                    flex
+                    h-12
+                    w-12
+                    sm:h-14
+                    sm:w-14
+                    md:h-16
+                    md:w-16
+
+                    items-center
+                    justify-center
+
+                    rounded-full
+                    bg-white/95
+                    shadow-2xl
+                    backdrop-blur-md
+
+                    transition-all
+                    duration-300
+
+                    hover:w-40
+                    sm:hover:w-48
+                  "
+                >
+                  <FaFile
+                    className="
+                      h-5
+                      w-5
+                      sm:h-6
+                      sm:w-6
+                      md:h-7
+                      md:w-7
+                      shrink-0
+                      text-[#002861]
+                    "
+                  />
+
+                  <span
+                    className="
+                      hidden
+                      overflow-hidden
+                      whitespace-nowrap
+
+                      text-sm
+                      sm:text-base
+                      md:text-lg
+
+                      font-semibold
+                      text-[#002861]
+
+                      group-hover:block
+                      ml-2
+                    "
                   >
-                    <div className="text-center font-semibold bg-white/50 w-[7rem] h-[7rem] fixed bottom-10 right-10 rounded-full flex items-center justify-center group-hover:w-[21rem] transition-all duration-400 hover:shadow-lg hover:shadow-black/40 hover:bg-white/80">
-                      <FaFile className=" w-[3rem] h-[3rem] text-black " />
-                      <p className="text-[2.3rem] min-w-[15rem] hidden group-hover:inline transition-all duration-700">Ver mas</p>
-                    </div>
-                  </Link>
-
-              
+                    Ver más
+                  </span>
+                </div>
+              </Link>
             </FadeIn>
           </div>
         </ModalImage>
-
       </div>
-    </div>
+    </main>
   );
 }
