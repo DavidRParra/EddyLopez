@@ -47,19 +47,19 @@ export default function VideosAdminPage() {
         <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-10 gap-6 border-b border-gray-300 pb-6">
           <div>
             <h1 className="text-3xl sm:text-4xl font-extrabold text-gray-900 tracking-tight">
-              Gestión de Videos y Publicaciones
+              Videos y Publicaciones
             </h1>
             <p className="text-base sm:text-lg text-gray-600 mt-2">
-              Visualiza y reproduce los videos almacenados en el servidor.
+              Aqui podrá ver los vídeos y recursos visuales del Arq. Eddy Lopez.
             </p>
           </div>
           {/* Botón redirigido a /admin */}
-          <Link
+          {/*<Link
             href="/admin"
             className="!bg-blue-600 !hover:bg-blue-700 text-white font-semibold text-base px-6 py-3 rounded-xl shadow-md transition transform hover:scale-105 text-center w-full sm:w-auto inline-block"
           >
             + Nuevo Video
-          </Link>
+          </Link>*/}
         </div>
 
         {/* Estado de carga */}
