@@ -167,7 +167,7 @@ function NosotrosPage() {
             "
           >
             <Image
-              src="/EddyLopezProfile2.png"
+              src="/Eddy-Lopez-new.jpeg"
               alt="Arq. Eddy Lopez"
               fill
               sizes="

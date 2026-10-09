@@ -12,15 +12,19 @@ function NavBar() {
         <div className="flex justify-between md:justify-evenly items-center w-full mx-[auto] bg-[#FFFFFF] text-[1.8rem] p-3 text-black relative border-[#002861] shadow-md z-40">
 
             <Link href="/" className="relative flex justify-center gap-4 items-center text-[2.5rem]">
-                {/* Descripcion de Eddy Lopez */}
-                <div className="flex group">
-                    <Image src="/LOGO.png" alt="Eddy Lopez Profile" width={900} height={500} className="w-[18rem] md:w-[28rem] h-auto group"></Image>
-                    <div className="w-[70rem] absolute flex-col top-40 left-0 scale-0 group-hover:flex z-30 bg-white rounded-4xl px-[6rem] py-[3rem] shadow-2xl border border-gray-200 hidden md:flex">
+                {/* Contenedor con group para activar el hover */}
+                <div className="relative group flex items-center">
+                    <Image src="/LOGO.png" alt="Eddy Lopez Profile" width={900} height={500} className="w-[18rem] md:w-[28rem] h-auto object-contain"></Image>
+                    
+                    {/* Tarjeta desplegable al hacer hover sobre el logo */}
+                    <div className="absolute top-full left-0 mt-2 w-[38rem] flex-col bg-white rounded-3xl p-8 shadow-2xl border border-gray-200 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 ease-in-out z-50 pointer-events-none group-hover:pointer-events-auto hidden md:flex">
                         <div
-                            style={{backgroundImage : "url('/EddyLopezProfile2.png')"}}
-                            className="w-[35rem] h-[35rem] rounded-full bg-no-repeat bg-cover mx-auto"
+                            style={{backgroundImage : "url('/Eddy-Lopez-new.jpeg')"}}
+                            className="w-[18rem] h-[18rem] rounded-full bg-no-repeat bg-cover bg-center mx-auto shadow-inner border-2 border-gray-100"
                         />
-                        <p className="mt-[2rem] text-center text-[#002861] text-[1.5rem]">Con una trayectoria de más de tres décadas en el sector inmobiliario, el arquitecto Eddy López se ha consolidado como un referente por su profesionalismo, visión estratégica y compromiso inquebrantable con la excelencia.</p>
+                        <p className="mt-5 text-center text-[#002861] text-[1.2rem] leading-relaxed font-medium">
+                            Con una trayectoria de más de tres décadas en el sector inmobiliario, el arquitecto Eddy López se ha consolidado como un referente por su profesionalismo, visión estratégica y compromiso inquebrantable con la excelencia.
+                        </p>
                     </div>
                 </div>
 
