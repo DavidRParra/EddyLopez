@@ -3,16 +3,23 @@
 import Image from "next/image";
 import Link from "next/link";
 import { useState } from "react";
-import { FaMapMarked, FaPhone, FaTimes, FaBars } from "react-icons/fa";
+import { FaMapMarked, FaPhone, FaTimes, FaBars, FaChevronDown } from "react-icons/fa";
 
 function NavBar() {
     const [isOpen, setIsOpen] = useState(false);
+    const [isInmueblesOpen, setIsInmueblesOpen] = useState(false);
+
+    // Función auxiliar para cerrar todo al interactuar con los links del menú
+    const handleLinkClick = () => {
+        setIsOpen(false);
+        setIsInmueblesOpen(false);
+    };
 
     return(
         <div className="flex justify-between md:justify-evenly items-center w-full mx-[auto] bg-[#FFFFFF] text-[1.8rem] p-3 text-black relative border-[#002861] shadow-md z-40">
 
             <Link href="/" className="relative flex justify-center gap-4 items-center text-[2.5rem]">
-                {/* Contenedor con group para activar el hover */}
+                {/* Contenedor con group para activar el hover del logo */}
                 <div className="relative group flex items-center">
                     <Image src="/LOGO.png" alt="Eddy Lopez Profile" width={900} height={500} className="w-[18rem] md:w-[28rem] h-auto object-contain"></Image>
                     
@@ -52,25 +59,72 @@ function NavBar() {
                 <ul className="flex flex-col lg:flex-row font-semibold gap-3 lg:gap-2 w-full lg:w-auto items-center">
                     <Link 
                         href="/" 
-                        onClick={() => setIsOpen(false)}
+                        onClick={handleLinkClick}
                         className="text-white !bg-[#002861] rounded-4xl px-5 py-2 border border-transparent hover:!bg-white hover:text-[#002861] hover:border-[#002861] w-full lg:w-auto text-center"
                     >
                         Inicio
                     </Link>
 
+                    {/* MENÚ DESPLEGABLE DE INMUEBLES */}
                     <li className="relative group w-full lg:w-auto text-center">
-                        <Link href="#" className="flex items-center justify-center gap-3 border border-transparent text-white !bg-[#002861] py-2 rounded-4xl px-4 group-hover:!bg-white group-hover:text-[#002861] group-hover:border-[#002861]">
-                            Inmuebles
-                        </Link>
+                        <button 
+                            onClick={() => setIsInmueblesOpen(!isInmueblesOpen)}
+                            className="flex items-center justify-center gap-2 border border-transparent text-white !bg-[#002861] py-2 rounded-4xl px-5 lg:group-hover:!bg-white lg:group-hover:text-[#002861] lg:group-hover:border-[#002861] w-full lg:w-auto focus:outline-none transition-colors duration-300"
+                        >
+                            <span>Inmuebles</span>
+                            <FaChevronDown className={`h-[1.2rem] w-[1.2rem] transform transition-transform duration-300 ${isInmueblesOpen ? 'rotate-180' : ''} lg:group-hover:rotate-180`} />
+                        </button>
+
+                        {/* Versión Desktop (Hover con puente invisible pt-2 para evitar que desaparezca) */}
+                        <div className="hidden lg:group-hover:block lg:absolute lg:left-0 lg:top-full pt-2 z-10 w-48">
+                            <ul className="shadow-xl text-[1.5rem] rounded-2xl py-2 bg-white border border-gray-100 text-left">
+                                <Link href="#" onClick={handleLinkClick}>
+                                    <li className="hover:bg-[#002861] hover:text-[#ffffff] px-4 py-2 transition-colors">Casas</li>
+                                </Link>
+                                <Link href="#" onClick={handleLinkClick}>
+                                    <li className="hover:bg-[#002861] hover:text-[#ffffff] px-4 py-2 transition-colors">Apartamentos</li>
+                                </Link>
+                                <Link href="#" onClick={handleLinkClick}>
+                                    <li className="hover:bg-[#002861] hover:text-[#ffffff] px-4 py-2 transition-colors">Edificios</li>
+                                </Link>
+                                <Link href="#" onClick={handleLinkClick}>
+                                    <li className="hover:bg-[#002861] hover:text-[#ffffff] px-4 py-2 transition-colors">Solares</li>
+                                </Link>
+                                <Link href="#" onClick={handleLinkClick}>
+                                    <li className="hover:bg-[#002861] hover:text-[#ffffff] px-4 py-2 transition-colors">Fincas</li>
+                                </Link>
+                            </ul>
+                        </div>
+
+                        {/* Versión Móvil (Clic con el estado) */}
+                        {isInmueblesOpen && (
+                            <ul className="lg:hidden shadow-xl text-[1.5rem] rounded-2xl py-2 bg-white border border-gray-100 text-left mt-2 w-full">
+                                <Link href="#" onClick={handleLinkClick}>
+                                    <li className="hover:bg-[#002861] hover:text-[#ffffff] px-4 py-2 transition-colors">Casas</li>
+                                </Link>
+                                <Link href="#" onClick={handleLinkClick}>
+                                    <li className="hover:bg-[#002861] hover:text-[#ffffff] px-4 py-2 transition-colors">Apartamentos</li>
+                                </Link>
+                                <Link href="#" onClick={handleLinkClick}>
+                                    <li className="hover:bg-[#002861] hover:text-[#ffffff] px-4 py-2 transition-colors">Edificios</li>
+                                </Link>
+                                <Link href="#" onClick={handleLinkClick}>
+                                    <li className="hover:bg-[#002861] hover:text-[#ffffff] px-4 py-2 transition-colors">Solares</li>
+                                </Link>
+                                <Link href="#" onClick={handleLinkClick}>
+                                    <li className="hover:bg-[#002861] hover:text-[#ffffff] px-4 py-2 transition-colors">Fincas</li>
+                                </Link>
+                            </ul>
+                        )}
                     </li>
 
-                    <Link href="/portafolio" onClick={() => setIsOpen(false)} className="flex items-center justify-center gap-3 border border-transparent text-white !bg-[#002861] py-2 rounded-4xl px-4 hover:!bg-white hover:text-[#002861] hover:border-[#002861] w-full lg:w-auto">Portafolio</Link>
+                    <Link href="/portafolio" onClick={handleLinkClick} className="flex items-center justify-center gap-3 border border-transparent text-white !bg-[#002861] py-2 rounded-4xl px-4 hover:!bg-white hover:text-[#002861] hover:border-[#002861] w-full lg:w-auto">Portafolio</Link>
 
-                    <Link href="/nosotros" onClick={() => setIsOpen(false)} className="flex items-center justify-center gap-3 border border-transparent text-white !bg-[#002861] py-2 rounded-4xl px-4 hover:!bg-white hover:text-[#002861] hover:border-[#002861] w-full lg:w-auto">Nosotros</Link>
+                    <Link href="/nosotros" onClick={handleLinkClick} className="flex items-center justify-center gap-3 border border-transparent text-white !bg-[#002861] py-2 rounded-4xl px-4 hover:!bg-white hover:text-[#002861] hover:border-[#002861] w-full lg:w-auto">Nosotros</Link>
 
-                    <Link href="/contacto" onClick={() => setIsOpen(false)} className="flex items-center justify-center gap-3 border border-transparent text-white !bg-[#002861] py-2 rounded-4xl px-4 hover:!bg-white hover:text-[#002861] hover:border-[#002861] w-full lg:w-auto">Contactanos</Link>
+                    <Link href="/contacto" onClick={handleLinkClick} className="flex items-center justify-center gap-3 border border-transparent text-white !bg-[#002861] py-2 rounded-4xl px-4 hover:!bg-white hover:text-[#002861] hover:border-[#002861] w-full lg:w-auto">Contactanos</Link>
 
-                    <Link href="/videos" onClick={() => setIsOpen(false)} className="flex items-center justify-center gap-3 border border-transparent text-white !bg-[#002861] py-2 rounded-4xl px-4 hover:!bg-white hover:text-[#002861] hover:border-[#002861] w-full lg:w-auto">Publicaciones</Link>
+                    <Link href="/videos" onClick={handleLinkClick} className="flex items-center justify-center gap-3 border border-transparent text-white !bg-[#002861] py-2 rounded-4xl px-4 hover:!bg-white hover:text-[#002861] hover:border-[#002861] w-full lg:w-auto">Publicaciones</Link>
                 </ul>
             </nav>
 
