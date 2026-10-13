@@ -4,7 +4,7 @@ import { FaInstagram, FaFacebook, FaWhatsapp } from "react-icons/fa";
 
 function NosotrosPage() {
   return (
-    <main className="w-full flex flex-col items-center">
+    <main className="w-full min-h-screen flex flex-col items-center justify-center px-4 py-8 md:py-12 gap-12 sm:gap-16">
 
       {/* =========================
           TITULO
@@ -31,10 +31,12 @@ function NosotrosPage() {
         className="
           w-[80vw]
           mx-auto
-          mt-8
-          sm:mt-10
+          mt-12
+          sm:mt-16
           mb-8
           sm:mb-10
+
+          max-w-5xl my-6 sm:my-10 space-y-4 sm:space-y-6
 
           bg-[#002861]
           text-white
@@ -124,13 +126,12 @@ function NosotrosPage() {
           justify-center
           items-center
 
-          gap-10
-          sm:gap-12
-          md:gap-8
-          lg:gap-12
+          gap-12
+          sm:gap-16
+          md:gap-20
 
-          mb-6
-          sm:mb-8
+          my-20
+          sm:my-30
         "
       >
 

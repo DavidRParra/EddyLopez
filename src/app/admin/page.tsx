@@ -61,8 +61,14 @@ export default function AdminVideosPage() {
     fetchVideos();
   }, []);
 
-  // Calcular porcentaje de uso para la barra de almacenamiento
+  // Calcular porcentaje de uso y espacio libre
   const percentage = Math.min(Number(((usedBytes / maxBytes) * 100).toFixed(1)), 100);
+  const freeGB = Math.max(MAX_LIMIT_GB - Number(usedGB), 0).toFixed(2);
+
+  // Cálculos precisos del SVG Donut Chart (Centro en 80,80 con radio 60)
+  const radius = 60;
+  const circumference = 2 * Math.PI * radius; // ≈ 376.99
+  const strokeDashoffset = circumference - (percentage / 100) * circumference;
 
   // Manejar Subida (POST)
   const handleUpload = async (e: React.FormEvent) => {
@@ -208,26 +214,60 @@ export default function AdminVideosPage() {
         )}
 
         {/* Tarjeta de Medidor de Almacenamiento */}
-        <div className="bg-white rounded-2xl shadow-sm border border-gray-200 p-6 mb-8">
-          <div className="flex justify-between items-center mb-3">
-            <h2 className="text-lg font-semibold text-[#002861] flex items-center gap-2">
-              <FaDatabase /> Almacenamiento en Servidor Linux (Límite: 5 GB)
+        <div className="bg-white rounded-2xl shadow-sm border border-gray-200 p-8 mb-8 flex flex-col md:flex-row items-center justify-between gap-8">
+          <div className="flex-1">
+            <h2 className="text-2xl font-bold text-[#002861] flex items-center gap-3 mb-3">
+              <FaDatabase /> Almacenamiento (Límite: 5 GB)
             </h2>
-            <span className={`text-sm font-bold px-3 py-1 rounded-full ${percentage > 90 ? 'bg-red-100 text-red-700' : 'bg-blue-50 text-[#002861]'}`}>
-              {usedGB} GB / 5.00 GB ({percentage}%)
-            </span>
-          </div>
-          <div className="w-full bg-gray-200 rounded-full h-4 overflow-hidden">
-            <div
-              className={`h-4 transition-all duration-500 ${percentage > 90 ? 'bg-red-600' : 'bg-[#002861]'}`}
-              style={{ width: `${percentage}%` }}
-            ></div>
-          </div>
-          {percentage > 85 && (
-            <p className="text-xs text-red-600 mt-2 flex items-center gap-1 font-medium">
-              <FaExclamationTriangle /> Atención: Estás cerca de alcanzar el límite máximo de almacenamiento en disco.
+            <p className="text-gray-600 text-lg mb-6">
+              Control en tiempo real del espacio ocupado por los archivos de video multimedia
             </p>
-          )}
+            <div className="flex flex-wrap gap-6 text-base font-semibold">
+              <div className="flex items-center gap-3">
+                <span className="w-4 h-4 rounded-full bg-[#002861] inline-block"></span>
+                <span>Ocupado: <strong className="text-lg">{usedGB} GB</strong></span>
+              </div>
+              <div className="flex items-center gap-3">
+                <span className="w-4 h-4 rounded-full bg-gray-200 inline-block"></span>
+                <span>Disponible: <strong className="text-lg">{freeGB} GB</strong></span>
+              </div>
+            </div>
+            {percentage > 85 && (
+              <p className="text-sm text-red-600 mt-4 flex items-center gap-2 font-bold">
+                <FaExclamationTriangle /> Atención: Estás cerca de alcanzar el límite máximo de almacenamiento en disco.
+              </p>
+            )}
+          </div>
+
+          {/* Círculo Gráfico Perfecto Centrado */}
+          <div className="relative w-48 h-48 flex items-center justify-center flex-shrink-0">
+            <svg viewBox="0 0 160 160" className="w-full h-full transform -rotate-90">
+              <circle
+                cx="80"
+                cy="80"
+                r={radius}
+                stroke="#E5E7EB"
+                strokeWidth="16"
+                fill="transparent"
+              />
+              <circle
+                cx="80"
+                cy="80"
+                r={radius}
+                stroke={percentage > 90 ? '#DC2626' : '#002861'}
+                strokeWidth="16"
+                fill="transparent"
+                strokeDasharray={circumference}
+                strokeDashoffset={strokeDashoffset}
+                strokeLinecap="round"
+                className="transition-all duration-700 ease-out"
+              />
+            </svg>
+            <div className="absolute inset-0 flex flex-col items-center justify-center text-center">
+              <span className="text-3xl font-extrabold text-[#002861] tracking-tight">{percentage}%</span>
+              <span className="text-xs font-bold text-gray-400 uppercase tracking-widest mt-0.5">USADO</span>
+            </div>
+          </div>
         </div>
 
         {/* Modal / Formulario flotante para Crear o Editar */}
@@ -286,50 +326,50 @@ export default function AdminVideosPage() {
           </div>
         )}
 
-        {/* Tabla de Publicaciones */}
+        {/* Tabla de Publicaciones con Letras Grandes */}
         <div className="bg-white rounded-2xl shadow-sm border border-gray-200 overflow-hidden">
-          <div className="px-6 py-4 border-b border-gray-200">
-            <h3 className="font-bold text-gray-800">Videos Publicados ({videos.length})</h3>
+          <div className="px-8 py-6 border-b border-gray-200">
+            <h3 className="text-2xl font-bold text-[#002861]">Videos Publicados ({videos.length})</h3>
           </div>
 
           <div className="overflow-x-auto">
             <table className="w-full text-left border-collapse">
               <thead>
-                <tr className="bg-gray-50 text-gray-600 text-xs uppercase tracking-wider border-b">
-                  <th className="py-3 px-6">Título</th>
-                  <th className="py-3 px-6">Archivo</th>
-                  <th className="py-3 px-6">Tamaño</th>
-                  <th className="py-3 px-6">Admin</th>
-                  <th className="py-3 px-6">Fecha</th>
-                  <th className="py-3 px-6 text-center">Acciones</th>
+                <tr className="bg-gray-100 text-gray-700 text-sm font-extrabold uppercase tracking-wider border-b border-gray-200">
+                  <th className="py-5 px-8">Título</th>
+                  <th className="py-5 px-8">Archivo</th>
+                  <th className="py-5 px-8">Tamaño</th>
+                  <th className="py-5 px-8">Admin</th>
+                  <th className="py-5 px-8">Fecha</th>
+                  <th className="py-5 px-8 text-center">Acciones</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-gray-200 text-sm">
+              <tbody className="divide-y divide-gray-200 text-base">
                 {videos.length === 0 && !loading ? (
                   <tr>
-                    <td colSpan={6} className="text-center py-8 text-gray-500">
+                    <td colSpan={6} className="text-center py-12 text-gray-500 text-lg font-medium">
                       No hay videos publicados todavía.
                     </td>
                   </tr>
                 ) : (
                   videos.map((video) => (
-                    <tr key={video.id} className="hover:bg-gray-50/60 transition">
-                      <td className="py-4 px-6 font-medium text-gray-900">{video.title}</td>
-                      <td className="py-4 px-6 text-gray-500 truncate max-w-xs">{video.file_name}</td>
-                      <td className="py-4 px-6 text-gray-600">{(video.file_size / (1024 * 1024)).toFixed(2)} MB</td>
-                      <td className="py-4 px-6 text-gray-600">{video.username || "Admin"}</td>
-                      <td className="py-4 px-6 text-gray-500">{video.created_at ? new Date(video.created_at).toLocaleDateString() : 'Reciente'}</td>
-                      <td className="py-4 px-6 text-center space-x-2">
+                    <tr key={video.id} className="hover:bg-gray-50 transition">
+                      <td className="py-5 px-8 font-bold text-gray-900 text-lg">{video.title}</td>
+                      <td className="py-5 px-8 text-gray-600 truncate max-w-xs font-mono text-sm">{video.file_name}</td>
+                      <td className="py-5 px-8 text-gray-700 font-semibold">{(video.file_size / (1024 * 1024)).toFixed(2)} MB</td>
+                      <td className="py-5 px-8 text-gray-700 font-semibold">{video.username || "Admin"}</td>
+                      <td className="py-5 px-8 text-gray-600 font-medium">{video.created_at ? new Date(video.created_at).toLocaleDateString() : 'Reciente'}</td>
+                      <td className="py-5 px-8 text-center space-x-3">
                         <button
                           onClick={() => { setEditingVideo(video); setTitle(video.title); setFile(null); setError(""); }}
-                          className="bg-blue-50 text-blue-600 p-2 rounded-lg hover:bg-blue-100 transition inline-flex items-center"
+                          className="bg-blue-50 text-blue-600 p-3 rounded-xl hover:bg-blue-100 transition inline-flex items-center text-lg shadow-sm"
                           title="Editar"
                         >
                           <FaEdit />
                         </button>
                         <button
                           onClick={() => handleDelete(video.id)}
-                          className="bg-red-50 text-red-600 p-2 rounded-lg hover:bg-red-100 transition inline-flex items-center"
+                          className="bg-red-50 text-red-600 p-3 rounded-xl hover:bg-red-100 transition inline-flex items-center text-lg shadow-sm"
                           title="Eliminar"
                         >
                           <FaTrash />

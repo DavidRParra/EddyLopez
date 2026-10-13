@@ -65,7 +65,7 @@ export default function VideosAdminPage() {
           </div>
         ) : videos.length === 0 ? (
           <div className="text-center py-20 bg-white rounded-2xl shadow-md border border-gray-200">
-            <p className="text-gray-700 text-xl font-medium">No hay videos registrados en la base de datos.</p>
+            <p className="text-gray-700 text-xl font-medium">No hay videos para mostrar.</p>
           </div>
         ) : (
           /* Cuadrícula de videos con tipografía ampliada */
@@ -129,32 +129,32 @@ export default function VideosAdminPage() {
 
       {/* MODAL PARA REPRODUCIR VIDEO */}
       {selectedVideo && (
-        <div className="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm flex items-center justify-center p-4 sm:p-6">
-          <div className="bg-white rounded-3xl shadow-2xl max-w-4xl w-full overflow-hidden flex flex-col border border-gray-200 animate-in fade-in zoom-in duration-200">
+        <div className="fixed inset-0 z-50 bg-black/85 backdrop-blur-md flex items-center justify-center p-3 sm:p-6 overflow-y-auto">
+          <div className="bg-white rounded-3xl shadow-2xl max-w-3xl w-full my-auto overflow-hidden flex flex-col border border-gray-200 animate-in fade-in zoom-in duration-200 relative">
             
-            {/* Cabecera del Modal */}
-            <div className="flex justify-between items-center p-6 border-b border-gray-200 bg-gray-50">
-              <h3 className="text-2xl sm:text-3xl font-bold text-gray-900 line-clamp-1">
+            {/* Cabecera del Modal con botón de cierre siempre visible */}
+            <div className="flex justify-between items-center p-4 sm:p-6 border-b border-gray-200 bg-gray-50 gap-4">
+              <h3 className="text-xl sm:text-2xl font-bold text-gray-900 line-clamp-1">
                 {selectedVideo.title}
               </h3>
               <button 
                 onClick={() => setSelectedVideo(null)}
-                className="bg-gray-200 hover:bg-gray-300 text-gray-800 font-bold w-10 h-10 rounded-full flex items-center justify-center text-xl transition"
+                className="bg-gray-200 hover:bg-gray-300 text-gray-800 font-bold w-11 h-11 rounded-full flex items-center justify-center text-2xl transition flex-shrink-0 shadow-sm"
                 aria-label="Cerrar modal"
               >
                 ✕
               </button>
             </div>
 
-            {/* Reproductor grande dentro del modal con src directo */}
-            <div className="relative w-full aspect-video bg-black">
+            {/* Contenedor del video con altura y ancho controlado para que no sature la pantalla */}
+            <div className="relative w-full bg-black flex items-center justify-center max-h-[60vh] sm:max-h-[70vh]">
               <video 
                 key={selectedVideo.id}
                 src={selectedVideo.file_path}
                 controls 
                 autoPlay
                 preload="auto"
-                className="w-full h-full object-contain"
+                className="w-auto h-auto max-w-full max-h-[60vh] sm:max-h-[70vh] object-contain mx-auto"
                 onError={(e) => console.error(`Error al reproducir en modal: ${selectedVideo.file_path}`, e)}
               >
                 Tu navegador no soporta la reproducción de video.
@@ -162,13 +162,13 @@ export default function VideosAdminPage() {
             </div>
 
             {/* Pie del modal */}
-            <div className="p-6 bg-gray-50 flex flex-col sm:flex-row justify-between items-center gap-4 border-t border-gray-200">
-              <span className="text-base text-gray-600 font-medium">
+            <div className="p-4 sm:p-6 bg-gray-50 flex flex-col sm:flex-row justify-between items-center gap-4 border-t border-gray-200">
+              <span className="text-sm sm:text-base text-gray-600 font-medium">
                 Publicado el: {selectedVideo.created_at ? new Date(selectedVideo.created_at).toLocaleDateString() : 'Reciente'}
               </span>
               <button 
                 onClick={() => setSelectedVideo(null)}
-                className="w-full sm:w-auto bg-gray-900 hover:bg-black text-white font-semibold text-lg px-8 py-3 rounded-xl transition shadow-md"
+                className="w-full sm:w-auto bg-gray-900 hover:bg-black text-white font-semibold text-base sm:text-lg px-6 py-3 rounded-xl transition shadow-md"
               >
                 Cerrar reproductor
               </button>
