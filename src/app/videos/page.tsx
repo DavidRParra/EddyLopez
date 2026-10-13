@@ -78,11 +78,11 @@ export default function VideosAdminPage() {
                 {/* Contenedor del Video en miniatura */}
                 <div className="relative w-full aspect-video bg-black group">
                   <video 
+                    src={video.file_path}
                     preload="metadata"
                     className="w-full h-full object-cover"
-                    onError={(e) => console.error(`Error al cargar la miniatura: ${video.file_path}`, e)}
+                    onError={(e) => console.error(`Error al cargar el video: ${video.file_path}`, e)}
                   >
-                    <source src={video.file_path} />
                     Tu navegador no soporta la reproducción de video.
                   </video>
                   
@@ -107,7 +107,7 @@ export default function VideosAdminPage() {
                       {video.title}
                     </h2>
 
-                    {/* DEPUBUĞACIÓN VISUAL: Muestra exactamente qué ruta viene de la BD */}
+                    {/* Depuración visual de la ruta */}
                     <div className="bg-gray-50 border border-gray-200 p-3 rounded-xl text-xs sm:text-sm text-gray-700 font-mono mb-4 break-all">
                       <span className="font-bold text-gray-900">Ruta en BD:</span> {video.file_path || 'Vacía'}
                     </div>
@@ -146,17 +146,17 @@ export default function VideosAdminPage() {
               </button>
             </div>
 
-            {/* Reproductor grande dentro del modal */}
+            {/* Reproductor grande dentro del modal con src directo */}
             <div className="relative w-full aspect-video bg-black">
               <video 
                 key={selectedVideo.id}
+                src={selectedVideo.file_path}
                 controls 
                 autoPlay
                 preload="auto"
                 className="w-full h-full object-contain"
                 onError={(e) => console.error(`Error al reproducir en modal: ${selectedVideo.file_path}`, e)}
               >
-                <source src={selectedVideo.file_path} />
                 Tu navegador no soporta la reproducción de video.
               </video>
             </div>
