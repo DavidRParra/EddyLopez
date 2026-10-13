@@ -30,7 +30,7 @@ export default function AdminVideosPage() {
   // Form inputs
   const [title, setTitle] = useState("");
   const [file, setFile] = useState<File | null>(null);
-  const [userId, setUserId] = useState("1"); // Cambiar según tu lógica de sesión de admin
+  const [userId, setUserId] = useState("1"); // ID del usuario administrador por defecto
 
   const MAX_LIMIT_GB = 5;
   const maxBytes = MAX_LIMIT_GB * 1024 * 1024 * 1024;
@@ -39,14 +39,16 @@ export default function AdminVideosPage() {
   const fetchVideos = async () => {
     try {
       setLoading(true);
+      setError("");
       const res = await fetch("/apis/videos");
       const data = await res.json();
-      if (data.success) {
-        setVideos(data.videos);
-        setUsedBytes(data.usedStorageBytes);
-        setUsedGB(data.usedStorageGB);
+      
+      if (res.ok && (data.success || Array.isArray(data.videos) || Array.isArray(data))) {
+        setVideos(data.videos || data);
+        setUsedBytes(data.usedStorageBytes || 0);
+        setUsedGB(data.usedStorageGB || "0");
       } else {
-        setError(data.error);
+        setError(data.error || "No se pudieron cargar los videos.");
       }
     } catch (err) {
       setError("Error de red al conectar con el servidor.");
@@ -65,7 +67,10 @@ export default function AdminVideosPage() {
   // Manejar Subida (POST)
   const handleUpload = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!file || !title) return;
+    if (!file || !title) {
+      setError("Por favor complete el título y seleccione un archivo de video.");
+      return;
+    }
 
     const formData = new FormData();
     formData.append("title", title);
@@ -74,23 +79,26 @@ export default function AdminVideosPage() {
 
     try {
       setLoading(true);
+      setError("");
+      
       const res = await fetch("/apis/videos", {
         method: "POST",
         body: formData,
       });
+      
       const data = await res.json();
 
-      if (data.success) {
-        setSuccessMsg(data.message);
+      if (res.ok && data.success) {
+        setSuccessMsg(data.message || "Video subido correctamente.");
         setTitle("");
         setFile(null);
         setIsUploading(false);
         fetchVideos();
       } else {
-        setError(data.error);
+        setError(data.error || "El servidor rechazó la subida del video.");
       }
     } catch (err) {
-      setError("Error al subir el archivo.");
+      setError("Error crítico al subir el archivo. Verifique su conexión o el tamaño del video.");
     } finally {
       setLoading(false);
     }
@@ -108,20 +116,23 @@ export default function AdminVideosPage() {
 
     try {
       setLoading(true);
+      setError("");
+      
       const res = await fetch("/apis/videos", {
         method: "PUT",
         body: formData,
       });
+      
       const data = await res.json();
 
-      if (data.success) {
-        setSuccessMsg(data.message);
+      if (res.ok && data.success) {
+        setSuccessMsg(data.message || "Publicación actualizada correctamente.");
         setEditingVideo(null);
         setTitle("");
         setFile(null);
         fetchVideos();
       } else {
-        setError(data.error);
+        setError(data.error || "No se pudo actualizar la publicación.");
       }
     } catch (err) {
       setError("Error al actualizar la publicación.");
@@ -135,16 +146,17 @@ export default function AdminVideosPage() {
     if (!confirm("¿Estás seguro de eliminar este video? Se borrará del servidor Linux y de la base de datos.")) return;
 
     try {
+      setError("");
       const res = await fetch(`/apis/videos?id=${id}`, {
         method: "DELETE",
       });
       const data = await res.json();
 
-      if (data.success) {
+      if (res.ok && data.success) {
         setSuccessMsg("Video eliminado correctamente.");
         fetchVideos();
       } else {
-        alert(data.error);
+        alert(data.error || "No se pudo eliminar el video.");
       }
     } catch (err) {
       alert("Error al intentar eliminar.");
@@ -173,7 +185,7 @@ export default function AdminVideosPage() {
               <FaEye /> Ver Videos Públicos
             </Link>
             <button
-              onClick={() => { setIsUploading(true); setEditingVideo(null); setTitle(""); setFile(null); }}
+              onClick={() => { setIsUploading(true); setEditingVideo(null); setTitle(""); setFile(null); setError(""); }}
               className="bg-[#002861] hover:bg-[#001d47] text-white px-5 py-2.5 rounded-xl font-medium shadow-md transition flex items-center justify-center gap-2 flex-1 md:flex-initial"
             >
               <FaUpload /> Subir Nuevo Video
@@ -183,19 +195,19 @@ export default function AdminVideosPage() {
 
         {/* Alertas de Error o Éxito */}
         {error && (
-          <div className="bg-red-100 border-l-4 border-red-500 text-red-700 p-4 mb-6 rounded-lg flex justify-between items-center">
+          <div className="bg-red-100 border-l-4 border-red-500 text-red-700 p-4 mb-6 rounded-lg flex justify-between items-center shadow-sm">
             <span>{error}</span>
             <button onClick={() => setError("")} className="font-bold">&times;</button>
           </div>
         )}
         {successMsg && (
-          <div className="bg-green-100 border-l-4 border-green-500 text-green-700 p-4 mb-6 rounded-lg flex justify-between items-center">
+          <div className="bg-green-100 border-l-4 border-green-500 text-green-700 p-4 mb-6 rounded-lg flex justify-between items-center shadow-sm">
             <span>{successMsg}</span>
             <button onClick={() => setSuccessMsg("")} className="font-bold">&times;</button>
           </div>
         )}
 
-        {/* Tarjeta de Medidor de Almacenamiento (5 GB Limit) */}
+        {/* Tarjeta de Medidor de Almacenamiento */}
         <div className="bg-white rounded-2xl shadow-sm border border-gray-200 p-6 mb-8">
           <div className="flex justify-between items-center mb-3">
             <h2 className="text-lg font-semibold text-[#002861] flex items-center gap-2">
@@ -250,12 +262,13 @@ export default function AdminVideosPage() {
                     onChange={(e) => setFile(e.target.files?.[0] || null)}
                     className="w-full border border-gray-300 rounded-lg p-2 text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-[#002861] file:text-white hover:file:bg-[#001d47]"
                   />
+                  <p className="text-xs text-gray-500 mt-1">Asegúrate de que el video no supere el espacio disponible en disco.</p>
                 </div>
 
                 <div className="flex justify-end gap-3 mt-6">
                   <button
                     type="button"
-                    onClick={() => { setIsUploading(false); setEditingVideo(null); }}
+                    onClick={() => { setIsUploading(false); setEditingVideo(null); setError(""); }}
                     className="px-4 py-2 border border-gray-300 rounded-lg text-gray-600 hover:bg-gray-100 font-medium"
                   >
                     Cancelar
@@ -263,9 +276,9 @@ export default function AdminVideosPage() {
                   <button
                     type="submit"
                     disabled={loading}
-                    className="px-5 py-2 bg-[#002861] text-white rounded-lg hover:bg-[#001d47] font-medium shadow"
+                    className="px-5 py-2 bg-[#002861] text-white rounded-lg hover:bg-[#001d47] font-medium shadow disabled:opacity-50"
                   >
-                    {loading ? "Guardando..." : editingVideo ? "Actualizar Cambios" : "Subir y Guardar"}
+                    {loading ? "Procesando..." : editingVideo ? "Actualizar Cambios" : "Subir y Guardar"}
                   </button>
                 </div>
               </form>
@@ -304,11 +317,11 @@ export default function AdminVideosPage() {
                       <td className="py-4 px-6 font-medium text-gray-900">{video.title}</td>
                       <td className="py-4 px-6 text-gray-500 truncate max-w-xs">{video.file_name}</td>
                       <td className="py-4 px-6 text-gray-600">{(video.file_size / (1024 * 1024)).toFixed(2)} MB</td>
-                      <td className="py-4 px-6 text-gray-600">{video.username}</td>
-                      <td className="py-4 px-6 text-gray-500">{new Date(video.created_at).toLocaleDateString()}</td>
+                      <td className="py-4 px-6 text-gray-600">{video.username || "Admin"}</td>
+                      <td className="py-4 px-6 text-gray-500">{video.created_at ? new Date(video.created_at).toLocaleDateString() : 'Reciente'}</td>
                       <td className="py-4 px-6 text-center space-x-2">
                         <button
-                          onClick={() => { setEditingVideo(video); setTitle(video.title); setFile(null); }}
+                          onClick={() => { setEditingVideo(video); setTitle(video.title); setFile(null); setError(""); }}
                           className="bg-blue-50 text-blue-600 p-2 rounded-lg hover:bg-blue-100 transition inline-flex items-center"
                           title="Editar"
                         >
