@@ -106,11 +106,7 @@ export default function VideosAdminPage() {
                     <h2 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-4">
                       {video.title}
                     </h2>
-
-                    {/* Depuración visual de la ruta */}
-                    <div className="bg-gray-50 border border-gray-200 p-3 rounded-xl text-xs sm:text-sm text-gray-700 font-mono mb-4 break-all">
-                      <span className="font-bold text-gray-900">Ruta en BD:</span> {video.file_path || 'Vacía'}
-                    </div>
+                    
                   </div>
 
                   {/* Botón directo grande */}
