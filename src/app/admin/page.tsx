@@ -63,12 +63,27 @@ export default function AdminVideosPage() {
 
   // Calcular porcentaje de uso y espacio libre
   const percentage = Math.min(Number(((usedBytes / maxBytes) * 100).toFixed(1)), 100);
+  const freePercentage = Number((100 - percentage).toFixed(1));
   const freeGB = Math.max(MAX_LIMIT_GB - Number(usedGB), 0).toFixed(2);
 
-  // Cálculos precisos del SVG Donut Chart (Centro en 80,80 con radio 60)
-  const radius = 60;
-  const circumference = 2 * Math.PI * radius; // ≈ 376.99
-  const strokeDashoffset = circumference - (percentage / 100) * circumference;
+  // Parámetros de la Dona SVG
+  const radius = 52;
+  const strokeWidth = 36;
+  const circumference = 2 * Math.PI * radius; // ≈ 326.72
+  
+  const usedLength = (percentage / 100) * circumference;
+  const freeLength = (freePercentage / 100) * circumference;
+
+  // Cálculo de los ángulos medios (en radianes) para colocar las etiquetas DENTRO del grosor del anillo
+  // Ángulo de inicio: -90° (arriba del círculo)
+  const angleUsedMid = -Math.PI / 2 + (percentage / 100) * Math.PI;
+  const angleFreeMid = -Math.PI / 2 + (percentage / 100) * 2 * Math.PI + (freePercentage / 100) * Math.PI;
+
+  const xUsed = 80 + radius * Math.cos(angleUsedMid);
+  const yUsed = 80 + radius * Math.sin(angleUsedMid);
+
+  const xFree = 80 + radius * Math.cos(angleFreeMid);
+  const yFree = 80 + radius * Math.sin(angleFreeMid);
 
   // Manejar Subida (POST)
   const handleUpload = async (e: React.FormEvent) => {
@@ -228,7 +243,7 @@ export default function AdminVideosPage() {
                 <span>Ocupado: <strong className="text-lg">{usedGB} GB</strong></span>
               </div>
               <div className="flex items-center gap-3">
-                <span className="w-4 h-4 rounded-full bg-gray-200 inline-block"></span>
+                <span className="w-4 h-4 rounded-full bg-[#3B82F6] inline-block"></span>
                 <span>Disponible: <strong className="text-lg">{freeGB} GB</strong></span>
               </div>
             </div>
@@ -239,34 +254,65 @@ export default function AdminVideosPage() {
             )}
           </div>
 
-          {/* Círculo Gráfico Perfecto Centrado */}
+          {/* Gráfico Circular con Números Dentro de las Franjas de Color */}
           <div className="relative w-48 h-48 flex items-center justify-center flex-shrink-0">
-            <svg viewBox="0 0 160 160" className="w-full h-full transform -rotate-90">
+            <svg viewBox="0 0 160 160" className="w-full h-full">
+              {/* Sección Disponible (#3B82F6) */}
               <circle
                 cx="80"
                 cy="80"
                 r={radius}
-                stroke="#E5E7EB"
-                strokeWidth="16"
+                stroke="#3B82F6"
+                strokeWidth={strokeWidth}
                 fill="transparent"
+                strokeDasharray={`${freeLength} ${circumference}`}
+                strokeDashoffset={-usedLength}
+                transform="rotate(-90 80 80)"
               />
+              {/* Sección Usado (#002861) */}
               <circle
                 cx="80"
                 cy="80"
                 r={radius}
-                stroke={percentage > 90 ? '#DC2626' : '#002861'}
-                strokeWidth="16"
+                stroke="#002861"
+                strokeWidth={strokeWidth}
                 fill="transparent"
-                strokeDasharray={circumference}
-                strokeDashoffset={strokeDashoffset}
-                strokeLinecap="round"
+                strokeDasharray={`${usedLength} ${circumference}`}
+                strokeDashoffset="0"
+                transform="rotate(-90 80 80)"
                 className="transition-all duration-700 ease-out"
               />
+
+              {/* Texto dentro de la sección Usado (solo si hay espacio) */}
+              {percentage > 3 && (
+                <text
+                  x={xUsed}
+                  y={yUsed}
+                  fill="#FFFFFF"
+                  fontSize="13"
+                  fontWeight="bold"
+                  textAnchor="middle"
+                  dominantBaseline="central"
+                >
+                  {percentage}%
+                </text>
+              )}
+
+              {/* Texto dentro de la sección Disponible */}
+              {freePercentage > 3 && (
+                <text
+                  x={xFree}
+                  y={yFree}
+                  fill="#FFFFFF"
+                  fontSize="13"
+                  fontWeight="bold"
+                  textAnchor="middle"
+                  dominantBaseline="central"
+                >
+                  {freePercentage}%
+                </text>
+              )}
             </svg>
-            <div className="absolute inset-0 flex flex-col items-center justify-center text-center">
-              <span className="text-3xl font-extrabold text-[#002861] tracking-tight">{percentage}%</span>
-              <span className="text-xs font-bold text-gray-400 uppercase tracking-widest mt-0.5">USADO</span>
-            </div>
           </div>
         </div>
 
