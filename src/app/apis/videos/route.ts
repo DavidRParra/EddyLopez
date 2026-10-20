@@ -22,9 +22,8 @@ const MAX_STORAGE_BYTES = 5 * 1024 * 1024 * 1024; // 5 GB en bytes
 export async function GET() {
   try {
     const [rows]: any = await pool.query(
-      `SELECT v.id, v.title, v.file_name, v.file_path, v.file_size, v.user_id, v.created_at, a.username 
+      `SELECT v.id, v.title, v.file_name, v.file_path, v.file_size, v.created_at 
        FROM videos v 
-       JOIN admins a ON v.user_id = a.id 
        ORDER BY v.created_at DESC`
     );
 
@@ -53,7 +52,7 @@ export async function POST(req: Request) {
     const formData = await req.formData();
     const file = formData.get("file") as File;
     const title = formData.get("title") as string;
-    const userId = formData.get("user_id") as string;
+    const userId = formData.get("id") as string;
 
     if (!file || !title || !userId) {
       return NextResponse.json(
@@ -91,8 +90,8 @@ export async function POST(req: Request) {
     await writeFile(filePath, buffer);
 
     await pool.query(
-      `INSERT INTO videos (title, file_name, file_path, file_size, user_id) VALUES (?, ?, ?, ?, ?)`,
-      [title, fileName, relativePath, newFileSize, userId]
+      `INSERT INTO videos (title, file_name, file_path, file_size) VALUES (?, ?, ?, ?)`,
+      [title, fileName, relativePath, newFileSize]
     );
 
     return NextResponse.json({ success: true, message: "Publicación de video creada exitosamente." });
