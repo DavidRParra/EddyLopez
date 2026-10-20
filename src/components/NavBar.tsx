@@ -20,19 +20,28 @@ function NavBar() {
 
             <Link href="/" className="relative flex justify-center gap-4 items-center text-[2.5rem]">
                 {/* Contenedor con group para activar el hover del logo */}
-                <div className="relative group flex items-center">
-                    <Image src="/LOGO.png" alt="Eddy Lopez Profile" width={900} height={500} className="w-[18rem] md:w-[28rem] h-auto object-contain"></Image>
-                    
-                    {/* Tarjeta desplegable al hacer hover sobre el logo */}
-                    <div className="absolute top-full left-0 mt-2 w-[38rem] flex-col bg-white rounded-3xl p-8 shadow-2xl border border-gray-200 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 ease-in-out z-50 pointer-events-none group-hover:pointer-events-auto hidden md:flex">
+                <div className="relative flex justify-center gap-4 items-center text-[2.5rem]">
+                    {/* Un solo Link hacia /nosotros para el Logo y la Tarjeta Desplegable */}
+                    <Link href="/nosotros" className="relative group flex items-center cursor-pointer block">
+                        <Image 
+                        src="/LOGO.png" 
+                        alt="Eddy Lopez Profile" 
+                        width={900} 
+                        height={500} 
+                        className="w-[18rem] md:w-[28rem] h-auto object-contain"
+                        />
+                        
+                        {/* Tarjeta desplegable */}
+                        <div className="absolute top-[80%] left-0 w-[38rem] flex-col bg-white rounded-3xl p-8 shadow-2xl border border-gray-200 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 ease-in-out z-50 hidden md:flex hover:opacity-100 hover:visible">
                         <div
-                            style={{backgroundImage : "url('/Eddy-Lopez-new.jpeg')"}}
+                            style={{ backgroundImage: "url('/Eddy-Lopez-new.jpeg')" }}
                             className="w-[18rem] h-[18rem] rounded-full bg-no-repeat bg-cover bg-center mx-auto shadow-inner border-2 border-gray-100"
                         />
                         <p className="mt-5 text-center text-[#002861] text-[1.2rem] leading-relaxed font-medium">
                             Con una trayectoria de más de tres décadas en el sector inmobiliario, el arquitecto Eddy López se ha consolidado como un referente por su profesionalismo, visión estratégica y compromiso inquebrantable con la excelencia.
                         </p>
-                    </div>
+                        </div>
+                    </Link>
                 </div>
 
                 <div className="hidden lg:flex absolute gap-3 font-bold rounded-lg z-30 bottom-0 right-0 text-[#002861]">
