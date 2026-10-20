@@ -1,9 +1,14 @@
+
 import { NextResponse } from "next/server";
-import { writeFile, unlink } from "fs/promises";
+import { mkdir, writeFile, unlink } from "fs/promises";
 import path from "path";
 import mysql from "mysql2/promise";
 
-// Configuración de la conexión a MySQL usando tus variables exactas del .env
+// Ejecutar estas rutas exclusivamente en el servidor Node.js.
+export const runtime = "nodejs";
+export const dynamic = "force-dynamic";
+
+// Conexión a MySQL.
 const pool = mysql.createPool({
   host: process.env.DB_SERVER || "72.60.26.63",
   user: process.env.DB_USER_LOGIN,
@@ -15,186 +20,483 @@ const pool = mysql.createPool({
   queueLimit: 0,
 });
 
-const UPLOAD_DIR = path.join(process.cwd(), "public/uploads/videos");
-const MAX_STORAGE_BYTES = 5 * 1024 * 1024 * 1024; // 5 GB en bytes
+// Directorio de almacenamiento de videos.
+const UPLOAD_DIR = path.join(
+  process.cwd(),
+  "public",
+  "uploads",
+  "videos"
+);
 
-// 1. GET: Ver todas las publicaciones y el espacio total consumido
+const MAX_STORAGE_BYTES = 5 * 1024 * 1024 * 1024;
+
+type VideoRow = {
+  id: number;
+  title: string;
+  file_name: string;
+  file_path: string;
+  file_size: number;
+  user_id: number;
+  created_at: Date | string;
+  username?: string | null;
+};
+
+function errorResponse(message: string, status: number) {
+  return NextResponse.json(
+    { success: false, error: message },
+    { status }
+  );
+}
+
+function sanitizeFileName(name: string) {
+  return path
+    .basename(name)
+    .replace(/[^a-zA-Z0-9._-]/g, "_");
+}
+
+function getStoredFilePath(fileName: string) {
+  // No permitir nombres de archivo que escapen del directorio.
+  if (
+    !fileName ||
+    path.basename(fileName) !== fileName ||
+    fileName.includes("/") ||
+    fileName.includes("\\")
+  ) {
+    throw new Error("Nombre de archivo no válido.");
+  }
+
+  return path.join(UPLOAD_DIR, fileName);
+}
+
+function isValidId(value: unknown): value is string {
+  return (
+    typeof value === "string" &&
+    /^\d+$/.test(value) &&
+    Number(value) > 0 &&
+    Number.isSafeInteger(Number(value))
+  );
+}
+
+function isValidTitle(value: unknown): value is string {
+  return (
+    typeof value === "string" &&
+    value.trim().length > 0 &&
+    value.trim().length <= 255
+  );
+}
+
+function isFile(value: FormDataEntryValue | null): value is File {
+  return (
+    value !== null &&
+    typeof value !== "string" &&
+    typeof value.arrayBuffer === "function" &&
+    typeof value.size === "number"
+  );
+}
+
+function isValidVideo(file: File) {
+  const extension = path
+    .extname(file.name)
+    .toLowerCase();
+
+  const allowedExtensions = [
+    ".mp4",
+    ".webm",
+    ".mov",
+    ".m4v",
+    ".avi",
+  ];
+
+  return (
+    file.size > 0 &&
+    allowedExtensions.includes(extension) &&
+    file.type.startsWith("video/")
+  );
+}
+
+// ======================================================
+// GET: Obtener videos y espacio de almacenamiento usado.
+// ======================================================
 export async function GET() {
   try {
-    const [rows]: any = await pool.query(
-      `SELECT v.id, v.title, v.file_name, v.file_path, v.file_size, v.created_at 
-       FROM videos v 
+    const [rows] = await pool.query(
+      `SELECT
+         v.id,
+         v.title,
+         v.file_name,
+         v.file_path,
+         v.file_size,
+         v.user_id,
+         v.created_at,
+         a.username
+       FROM videos v
+       LEFT JOIN admins a ON a.id = v.user_id
        ORDER BY v.created_at DESC`
     );
 
-    const [sumRows]: any = await pool.query("SELECT SUM(file_size) as total_size FROM videos");
-    const totalBytes = sumRows[0]?.total_size || 0;
-    const usedGB = (totalBytes / (1024 * 1024 * 1024)).toFixed(3);
+    const [sumRows] = await pool.query(
+      `SELECT COALESCE(SUM(file_size), 0) AS total_size
+       FROM videos`
+    );
+
+    const videos = rows as VideoRow[];
+    const totals = sumRows as Array<{ total_size: number | string }>;
+
+    const totalBytes = Number(totals[0]?.total_size ?? 0);
+    const usedGB = (totalBytes / (1024 ** 3)).toFixed(3);
 
     return NextResponse.json({
       success: true,
-      videos: rows,
+      videos,
       usedStorageBytes: totalBytes,
       usedStorageGB: usedGB,
       maxStorageGB: 5,
     });
   } catch (error) {
-    return NextResponse.json(
-      { success: false, error: "Error al obtener las publicaciones: " + String(error) },
-      { status: 500 }
+    console.error("Error al obtener videos:", error);
+
+    return errorResponse(
+      "Error al obtener las publicaciones.",
+      500
     );
   }
 }
 
-// 2. POST: Subir un nuevo video validando el límite de 5 GB
+// ======================================================
+// POST: Subir un video nuevo.
+// ======================================================
 export async function POST(req: Request) {
+  let savedFilePath: string | null = null;
+
   try {
     const formData = await req.formData();
-    const file = formData.get("file") as File;
-    const title = formData.get("title") as string;
-    const userId = formData.get("id") as string;
 
-    if (!file || !title || !userId) {
-      return NextResponse.json(
-        { success: false, error: "Faltan datos obligatorios (archivo, título o usuario)." },
-        { status: 400 }
+    const fileValue = formData.get("file");
+    const titleValue = formData.get("title");
+    const userIdValue = formData.get("user_id");
+
+    if (
+      !isFile(fileValue) ||
+      !isValidTitle(titleValue) ||
+      !isValidId(userIdValue)
+    ) {
+      return errorResponse(
+        "Faltan datos obligatorios o son inválidos. Verifica el título, el archivo y el administrador.",
+        400
       );
     }
 
-    const [sumRows]: any = await pool.query("SELECT SUM(file_size) as total_size FROM videos");
-    const currentSize = sumRows[0]?.total_size || 0;
-    const newFileSize = file.size;
+    const file = fileValue;
+    const title = titleValue.trim();
+    const userId = Number(userIdValue);
 
-    if (currentSize + newFileSize > MAX_STORAGE_BYTES) {
-      const currentGB = (currentSize / (1024 * 1024 * 1024)).toFixed(2);
-      return NextResponse.json(
-        {
-          success: false,
-          error: `Límite de 5 GB alcanzado. Espacio actual ocupado: ${currentGB} GB.`,
-        },
-        { status: 400 }
+    if (!isValidVideo(file)) {
+      return errorResponse(
+        "El archivo debe ser un video válido en formato MP4, WEBM, MOV, M4V o AVI.",
+        400
       );
     }
 
-    const bytes = await file.arrayBuffer();
-    const buffer = Buffer.from(bytes);
+    // Comprobar que el administrador exista.
+    const [adminRows] = await pool.query(
+      "SELECT id FROM admins WHERE id = ? LIMIT 1",
+      [userId]
+    );
 
-    const uniqueSuffix = Date.now() + "-" + Math.round(Math.random() * 1e9);
-    const sanitizedName = file.name.replace(/\s+/g, "_");
-    const fileName = `${uniqueSuffix}-${sanitizedName}`;
-    const filePath = path.join(UPLOAD_DIR, fileName);
+    if ((adminRows as Array<{ id: number }>).length === 0) {
+      return errorResponse(
+        "El administrador indicado no existe.",
+        400
+      );
+    }
+
+    // Comprobar almacenamiento actual.
+    const [sumRows] = await pool.query(
+      `SELECT COALESCE(SUM(file_size), 0) AS total_size
+       FROM videos`
+    );
+
+    const totals = sumRows as Array<{ total_size: number | string }>;
+    const currentSize = Number(totals[0]?.total_size ?? 0);
+
+    if (currentSize + file.size > MAX_STORAGE_BYTES) {
+      return errorResponse(
+        `No hay suficiente espacio. Uso actual: ${(currentSize / (1024 ** 3)).toFixed(2)} GB de 5 GB.`,
+        400
+      );
+    }
+
+    await mkdir(UPLOAD_DIR, { recursive: true });
+
+    const uniqueSuffix =
+      `${Date.now()}-${Math.round(Math.random() * 1e9)}`;
+
+    const fileName =
+      `${uniqueSuffix}-${sanitizeFileName(file.name)}`;
+
+    savedFilePath = getStoredFilePath(fileName);
+
+    const buffer = Buffer.from(await file.arrayBuffer());
+
+    await writeFile(savedFilePath, buffer);
+
     const relativePath = `/uploads/videos/${fileName}`;
 
-    const { mkdir } = await import("fs/promises");
-    await mkdir(UPLOAD_DIR, { recursive: true }).catch(() => {});
-    await writeFile(filePath, buffer);
-
     await pool.query(
-      `INSERT INTO videos (title, file_name, file_path, file_size) VALUES (?, ?, ?, ?)`,
-      [title, fileName, relativePath, newFileSize]
+      `INSERT INTO videos
+         (title, file_name, file_path, file_size, user_id)
+       VALUES (?, ?, ?, ?, ?)`,
+      [
+        title,
+        fileName,
+        relativePath,
+        file.size,
+        userId,
+      ]
     );
 
-    return NextResponse.json({ success: true, message: "Publicación de video creada exitosamente." });
-  } catch (error) {
     return NextResponse.json(
-      { success: false, error: "Error en el servidor al subir el archivo: " + String(error) },
-      { status: 500 }
+      {
+        success: true,
+        message: "Publicación de video creada exitosamente.",
+      },
+      { status: 201 }
+    );
+  } catch (error) {
+    if (savedFilePath) {
+      await unlink(savedFilePath).catch(() => {});
+    }
+
+    console.error("Error al subir video:", error);
+
+    return errorResponse(
+      "Error en el servidor al subir el archivo.",
+      500
     );
   }
 }
 
-// 3. PUT: Actualizar una publicación
+// ======================================================
+// PUT: Actualizar el título o reemplazar un video.
+// ======================================================
 export async function PUT(req: Request) {
+  let newFilePath: string | null = null;
+
   try {
     const formData = await req.formData();
-    const id = formData.get("id") as string;
-    const title = formData.get("title") as string;
-    const file = formData.get("file") as File | null;
 
-    if (!id || !title) {
-      return NextResponse.json(
-        { success: false, error: "El ID y el título son obligatorios." },
-        { status: 400 }
+    const idValue = formData.get("id");
+    const titleValue = formData.get("title");
+    const fileValue = formData.get("file");
+
+    if (!isValidId(idValue) || !isValidTitle(titleValue)) {
+      return errorResponse(
+        "El ID y un título válido son obligatorios.",
+        400
       );
     }
 
-    const [rows]: any = await pool.query("SELECT * FROM videos WHERE id = ?", [id]);
-    if (rows.length === 0) {
-      return NextResponse.json({ success: false, error: "Video no encontrado." }, { status: 404 });
+    if (
+      fileValue !== null &&
+      typeof fileValue === "string"
+    ) {
+      return errorResponse(
+        "El archivo enviado no es válido.",
+        400
+      );
     }
 
-    const currentVideo = rows[0];
+    const id = Number(idValue);
+    const title = titleValue.trim();
+    const file = isFile(fileValue) ? fileValue : null;
+
+    const [rows] = await pool.query(
+      "SELECT * FROM videos WHERE id = ? LIMIT 1",
+      [id]
+    );
+
+    const existingVideos = rows as VideoRow[];
+
+    if (existingVideos.length === 0) {
+      return errorResponse("Video no encontrado.", 404);
+    }
+
+    const currentVideo = existingVideos[0];
+
     let newFileName = currentVideo.file_name;
-    let newFilePath = currentVideo.file_path;
-    let newFileSize = currentVideo.file_size;
+    let updatedFilePath = currentVideo.file_path;
+    let newFileSize = Number(currentVideo.file_size);
 
+    // Si se envió un archivo, comprobarlo y guardarlo primero.
     if (file && file.size > 0) {
-      const [sumRows]: any = await pool.query("SELECT SUM(file_size) as total_size FROM videos WHERE id != ?", [id]);
-      const currentSizeWithoutThis = sumRows[0]?.total_size || 0;
-
-      if (currentSizeWithoutThis + file.size > MAX_STORAGE_BYTES) {
-        return NextResponse.json(
-          { success: false, error: "El nuevo archivo excede el límite de 5 GB." },
-          { status: 400 }
+      if (!isValidVideo(file)) {
+        return errorResponse(
+          "El archivo debe ser un video válido en formato MP4, WEBM, MOV, M4V o AVI.",
+          400
         );
       }
 
-      try {
-        await unlink(path.join(UPLOAD_DIR, currentVideo.file_name));
-      } catch {}
+      const [sumRows] = await pool.query(
+        `SELECT COALESCE(SUM(file_size), 0) AS total_size
+         FROM videos
+         WHERE id <> ?`,
+        [id]
+      );
 
-      const bytes = await file.arrayBuffer();
-      const buffer = Buffer.from(bytes);
-      const uniqueSuffix = Date.now() + "-" + Math.round(Math.random() * 1e9);
-      newFileName = `${uniqueSuffix}-${file.name.replace(/\s+/g, "_")}`;
-      newFilePath = `/uploads/videos/${newFileName}`;
+      const totals = sumRows as Array<{
+        total_size: number | string;
+      }>;
+
+      const currentSizeWithoutThis = Number(
+        totals[0]?.total_size ?? 0
+      );
+
+      if (
+        currentSizeWithoutThis + file.size >
+        MAX_STORAGE_BYTES
+      ) {
+        return errorResponse(
+          "El nuevo archivo excede el límite de almacenamiento de 5 GB.",
+          400
+        );
+      }
+
+      await mkdir(UPLOAD_DIR, { recursive: true });
+
+      const uniqueSuffix =
+        `${Date.now()}-${Math.round(Math.random() * 1e9)}`;
+
+      newFileName =
+        `${uniqueSuffix}-${sanitizeFileName(file.name)}`;
+
+      newFilePath = getStoredFilePath(newFileName);
+
+      const buffer = Buffer.from(await file.arrayBuffer());
+
+      await writeFile(newFilePath, buffer);
+
+      updatedFilePath = `/uploads/videos/${newFileName}`;
       newFileSize = file.size;
-
-      await writeFile(path.join(UPLOAD_DIR, newFileName), buffer);
     }
 
-    await pool.query(
-      `UPDATE videos SET title = ?, file_name = ?, file_path = ?, file_size = ? WHERE id = ?`,
-      [title, newFileName, newFilePath, newFileSize, id]
-    );
+    try {
+      await pool.query(
+        `UPDATE videos
+         SET title = ?, file_name = ?, file_path = ?, file_size = ?
+         WHERE id = ?`,
+        [
+          title,
+          newFileName,
+          updatedFilePath,
+          newFileSize,
+          id,
+        ]
+      );
+    } catch (error) {
+      if (newFilePath) {
+        await unlink(newFilePath).catch(() => {});
+      }
 
-    return NextResponse.json({ success: true, message: "Publicación actualizada correctamente." });
+      throw error;
+    }
+
+    // Solo después de actualizar MySQL se elimina el archivo anterior.
+    if (newFilePath) {
+      try {
+        const oldPath = getStoredFilePath(
+          currentVideo.file_name
+        );
+
+        await unlink(oldPath);
+      } catch (error) {
+        console.error(
+          "No se pudo eliminar el archivo anterior:",
+          error
+        );
+      }
+    }
+
+    return NextResponse.json({
+      success: true,
+      message: "Publicación actualizada correctamente.",
+    });
   } catch (error) {
-    return NextResponse.json(
-      { success: false, error: "Error al actualizar: " + String(error) },
-      { status: 500 }
+    console.error("Error al actualizar video:", error);
+
+    return errorResponse(
+      "Error al actualizar la publicación.",
+      500
     );
   }
 }
 
-// 4. DELETE: Eliminar una publicación
+// ======================================================
+// DELETE: Eliminar un video y su registro.
+// ======================================================
 export async function DELETE(req: Request) {
   try {
     const { searchParams } = new URL(req.url);
-    const id = searchParams.get("id");
+    const idValue = searchParams.get("id");
 
-    if (!id) {
-      return NextResponse.json({ success: false, error: "Se requiere el ID del video." }, { status: 400 });
+    if (!isValidId(idValue)) {
+      return errorResponse(
+        "Se requiere un ID de video válido.",
+        400
+      );
     }
 
-    const [rows]: any = await pool.query("SELECT * FROM videos WHERE id = ?", [id]);
-    if (rows.length === 0) {
-      return NextResponse.json({ success: false, error: "Publicación no encontrada." }, { status: 404 });
+    const id = Number(idValue);
+
+    const [rows] = await pool.query(
+      "SELECT * FROM videos WHERE id = ? LIMIT 1",
+      [id]
+    );
+
+    const videos = rows as VideoRow[];
+
+    if (videos.length === 0) {
+      return errorResponse(
+        "Publicación no encontrada.",
+        404
+      );
     }
 
-    const video = rows[0];
+    const video = videos[0];
+
+    // Eliminar primero el registro de MySQL.
+    // Si falla la base de datos, el archivo permanece intacto.
+    await pool.query(
+      "DELETE FROM videos WHERE id = ?",
+      [id]
+    );
+
+    let fileDeleted = true;
 
     try {
-      await unlink(path.join(UPLOAD_DIR, video.file_name));
-    } catch {}
+      const filePath = getStoredFilePath(video.file_name);
+      await unlink(filePath);
+    } catch (error) {
+      fileDeleted = false;
 
-    await pool.query("DELETE FROM videos WHERE id = ?", [id]);
+      console.error(
+        "El registro se eliminó, pero no se pudo eliminar el archivo:",
+        error
+      );
+    }
 
-    return NextResponse.json({ success: true, message: "Publicación y archivo eliminados correctamente." });
+    return NextResponse.json({
+      success: true,
+      message: fileDeleted
+        ? "Publicación y archivo eliminados correctamente."
+        : "El registro se eliminó, pero el archivo físico requiere limpieza manual.",
+      fileDeleted,
+    });
   } catch (error) {
-    return NextResponse.json(
-      { success: false, error: "Error al eliminar: " + String(error) },
-      { status: 500 }
+    console.error("Error al eliminar video:", error);
+
+    return errorResponse(
+      "Error al eliminar la publicación.",
+      500
     );
   }
 }
