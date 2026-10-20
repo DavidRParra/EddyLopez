@@ -1,7 +1,6 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import Link from 'next/link';
 
 interface VideoPost {
   id: number;
@@ -14,7 +13,6 @@ interface VideoPost {
 export default function VideosAdminPage() {
   const [videos, setVideos] = useState<VideoPost[]>([]);
   const [loading, setLoading] = useState(true);
-  
   const [selectedVideo, setSelectedVideo] = useState<VideoPost | null>(null);
 
   const fetchVideos = async () => {
@@ -63,6 +61,7 @@ export default function VideosAdminPage() {
           </div>
         </div>
 
+        {/* Estado de carga */}
         {loading ? (
           <div className="flex justify-center items-center py-28">
             <div className="animate-spin rounded-full h-16 w-16 border-b-4 border-blue-600"></div>
@@ -72,14 +71,14 @@ export default function VideosAdminPage() {
             <p className="text-gray-700 text-xl font-medium">No hay videos para mostrar.</p>
           </div>
         ) : (
-
+          /* Cuadrícula de videos */
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
             {videos.map((video) => (
               <div 
                 key={video.id} 
                 className="bg-white rounded-2xl shadow-lg border border-gray-200 overflow-hidden flex flex-col transition hover:shadow-xl"
               >
-
+                {/* Contenedor del video en miniatura */}
                 <div className="relative w-full aspect-video bg-black group">
                   <video 
                     src={getVideoSrc(video.file_path, true)}
@@ -92,6 +91,7 @@ export default function VideosAdminPage() {
                     Tu navegador no soporta la reproducción de video.
                   </video>
                   
+                  {/* Capa interactiva para abrir el modal */}
                   <div className="absolute inset-0 bg-black/40 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
                     <button 
                       onClick={() => setSelectedVideo(video)}
@@ -102,6 +102,7 @@ export default function VideosAdminPage() {
                   </div>
                 </div>
 
+                {/* Contenido de la tarjeta */}
                 <div className="p-6 sm:p-8 flex flex-col flex-grow justify-between">
                   <div>
                     <span className="text-base font-bold text-blue-600 mb-2 uppercase tracking-wider block">
@@ -126,10 +127,12 @@ export default function VideosAdminPage() {
         )}
       </div>
 
+      {/* Modal para reproducir video */}
       {selectedVideo && (
         <div className="fixed inset-0 z-50 bg-black/85 backdrop-blur-md flex items-center justify-center p-3 sm:p-6 overflow-y-auto">
           <div className="bg-white rounded-3xl shadow-2xl max-w-3xl w-full my-auto overflow-hidden flex flex-col border border-gray-200 animate-in fade-in zoom-in duration-200 relative">
             
+            {/* Cabecera del modal */}
             <div className="flex justify-between items-center p-4 sm:p-6 border-b border-gray-200 bg-gray-50 gap-4">
               <h3 className="text-xl sm:text-2xl font-bold text-gray-900 line-clamp-1">
                 {selectedVideo.title}
@@ -143,6 +146,7 @@ export default function VideosAdminPage() {
               </button>
             </div>
 
+            {/* Contenedor del video en modal */}
             <div className="relative w-full bg-black flex items-center justify-center max-h-[60vh] sm:max-h-[70vh]">
               <video 
                 key={selectedVideo.id}
@@ -158,6 +162,7 @@ export default function VideosAdminPage() {
               </video>
             </div>
 
+            {/* Pie del modal */}
             <div className="p-4 sm:p-6 bg-gray-50 flex flex-col sm:flex-row justify-between items-center gap-4 border-t border-gray-200">
               <span className="text-sm sm:text-base text-gray-600 font-medium">
                 Publicado el: {selectedVideo.created_at ? new Date(selectedVideo.created_at).toLocaleDateString() : 'Reciente'}
