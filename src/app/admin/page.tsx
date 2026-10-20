@@ -262,7 +262,7 @@ export default function AdminVideosPage() {
                 cx="80"
                 cy="80"
                 r={radius}
-                stroke="#3B82F6"
+                stroke="#002861"
                 strokeWidth={strokeWidth}
                 fill="transparent"
                 strokeDasharray={`${freeLength} ${circumference}`}
@@ -274,7 +274,7 @@ export default function AdminVideosPage() {
                 cx="80"
                 cy="80"
                 r={radius}
-                stroke="#002861"
+                stroke="#E7000B"
                 strokeWidth={strokeWidth}
                 fill="transparent"
                 strokeDasharray={`${usedLength} ${circumference}`}

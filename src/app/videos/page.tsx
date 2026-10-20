@@ -48,7 +48,8 @@ export default function VideosAdminPage() {
 
   return (
     <div className="min-h-screen bg-gray-100 p-6 sm:p-8 lg:p-12">
-      <div className="max-w-6xl mx-auto">
+      {/* Ampliamos el contenedor máximo para que las 4 columnas tengan espacio de sobra */}
+      <div className="max-w-[1400px] mx-auto">
         {/* Encabezado */}
         <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-10 gap-6 border-b border-gray-300 pb-6">
           <div>
@@ -71,8 +72,8 @@ export default function VideosAdminPage() {
             <p className="text-gray-700 text-xl font-medium">No hay videos para mostrar.</p>
           </div>
         ) : (
-          /* Cuadrícula de videos */
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+          /* Cuadrícula de 4 columnas optimizada con mejor espacio */
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
             {videos.map((video) => (
               <div 
                 key={video.id} 
@@ -95,30 +96,30 @@ export default function VideosAdminPage() {
                   <div className="absolute inset-0 bg-black/40 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
                     <button 
                       onClick={() => setSelectedVideo(video)}
-                      className="bg-blue-600 hover:bg-blue-700 text-white font-bold px-6 py-3 rounded-xl text-lg shadow-xl transition transform hover:scale-105 flex items-center gap-2"
+                      className="bg-blue-600 hover:bg-blue-700 text-white font-bold px-4 py-2.5 rounded-xl text-base shadow-xl transition transform hover:scale-105 flex items-center gap-2"
                     >
-                      <span>▶</span> Reproducir en grande
+                      <span>▶</span> Ver grande
                     </button>
                   </div>
                 </div>
 
-                {/* Contenido de la tarjeta */}
-                <div className="p-6 sm:p-8 flex flex-col flex-grow justify-between">
+                {/* Contenido de la tarjeta ajustado para 4 columnas */}
+                <div className="p-5 flex flex-col flex-grow justify-between">
                   <div>
-                    <span className="text-base font-bold text-blue-600 mb-2 uppercase tracking-wider block">
+                    <span className="text-xs font-bold text-blue-600 mb-2 uppercase tracking-wider block">
                       {video.created_at ? new Date(video.created_at).toLocaleDateString() : 'Reciente'}
                     </span>
-                    <h2 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-4">
+                    <h2 className="text-xl font-bold text-gray-900 mb-4 line-clamp-2">
                       {video.title}
                     </h2>
                   </div>
 
-                  {/* Botón directo grande */}
+                  {/* Botón directo */}
                   <button 
                     onClick={() => setSelectedVideo(video)}
-                    className="w-full bg-blue-50 hover:bg-blue-100 text-blue-700 font-semibold text-lg py-3 px-4 rounded-xl transition border border-blue-200 flex items-center justify-center gap-2 mt-2"
+                    className="w-full bg-blue-50 hover:bg-blue-100 text-blue-700 font-semibold text-sm py-2.5 px-3 rounded-xl transition border border-blue-200 flex items-center justify-center gap-2 mt-2"
                   >
-                    <span>▶ Ver y reproducir video</span>
+                    <span>▶ Reproducir video</span>
                   </button>
                 </div>
               </div>
