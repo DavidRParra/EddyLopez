@@ -65,7 +65,7 @@ function getStoredFilePath(fileName: string) {
 function isValidId(value: unknown): value is string {
   return (
     typeof value === "string" &&
-    /^\d+\$/.test(value) &&
+    /^\d+$/.test(value) &&
     Number(value) > 0 &&
     Number.isSafeInteger(Number(value))
   );
