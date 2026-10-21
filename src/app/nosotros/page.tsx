@@ -29,14 +29,14 @@ function NosotrosPage() {
       ========================== */}
       <section
         className="
-          w-[80vw]
+          w-[90vw]
           mx-auto
           mt-12
           sm:mt-16
           mb-8
           sm:mb-10
 
-          max-w-5xl my-6 sm:my-10 space-y-4 sm:space-y-6
+          max-w-540 my-6 sm:my-10 space-y-4 sm:space-y-6
 
           bg-[#002861]
           text-white
