@@ -1,4 +1,3 @@
-
 import { NextResponse } from "next/server";
 import { mkdir, writeFile, unlink } from "fs/promises";
 import path from "path";
@@ -20,13 +19,8 @@ const pool = mysql.createPool({
   queueLimit: 0,
 });
 
-// Directorio de almacenamiento de videos.
-const UPLOAD_DIR = path.join(
-  process.cwd(),
-  "public",
-  "uploads",
-  "videos"
-);
+// Directorio de almacenamiento externo en el VPS (Opción 2 con Nginx).
+const UPLOAD_DIR = "/var/www/EddyLopez/videos";
 
 const MAX_STORAGE_BYTES = 5 * 1024 * 1024 * 1024;
 
@@ -71,7 +65,7 @@ function getStoredFilePath(fileName: string) {
 function isValidId(value: unknown): value is string {
   return (
     typeof value === "string" &&
-    /^\d+$/.test(value) &&
+    /^\d+\$/.test(value) &&
     Number(value) > 0 &&
     Number.isSafeInteger(Number(value))
   );
@@ -240,7 +234,7 @@ export async function POST(req: Request) {
 
     await writeFile(savedFilePath, buffer);
 
-    const relativePath = `/uploads/videos/${fileName}`;
+    const relativePath = `/videos-srv/${fileName}`;
 
     await pool.query(
       `INSERT INTO videos
@@ -375,7 +369,7 @@ export async function PUT(req: Request) {
 
       await writeFile(newFilePath, buffer);
 
-      updatedFilePath = `/uploads/videos/${newFileName}`;
+      updatedFilePath = `/videos-srv/${newFileName}`;
       newFileSize = file.size;
     }
 
@@ -464,7 +458,6 @@ export async function DELETE(req: Request) {
     const video = videos[0];
 
     // Eliminar primero el registro de MySQL.
-    // Si falla la base de datos, el archivo permanece intacto.
     await pool.query(
       "DELETE FROM videos WHERE id = ?",
       [id]
