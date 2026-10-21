@@ -30,13 +30,13 @@ export default function Home() {
         <div className="w-[92vw] md:w-[75vw] my-4">
           <Slider {...settings} className="w-full">
             <div className="w-full h-[30vh] sm:h-[50vh] md:h-[80vh]">
-              <Image src="/Casa-Jose-Slider1.jpeg" alt="Imagen fondo" width={1000} height={1000} className="w-full h-full object-cover rounded-lg" />
-            </div>
-            <div className="w-full h-[30vh] sm:h-[50vh] md:h-[80vh]">
               <Image src="/Slider10.png" alt="Imagen fondo" width={1500} height={1000} className="w-full h-full object-cover rounded-lg" />
             </div>
             <div className="w-full h-[30vh] sm:h-[50vh] md:h-[80vh]">
               <Image src="/Slider11.png" alt="Imagen fondo" width={1500} height={1000} className="w-full h-full object-cover rounded-lg" />
+            </div>
+            <div className="w-full h-[30vh] sm:h-[50vh] md:h-[80vh]">
+              <Image src="/Casa-Jose-Slider1.jpeg" alt="Imagen fondo" width={1000} height={1000} className="w-full h-full object-cover rounded-lg" />
             </div>
             <div className="w-full h-[30vh] sm:h-[50vh] md:h-[80vh]">
               <Image src="/Slider12.png" alt="Imagen fondo" width={1500} height={1000} className="w-full h-full object-cover rounded-lg" />
