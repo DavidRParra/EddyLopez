@@ -13,7 +13,7 @@ const ImageUrls = [
   "/Portafolio3.jpg",
   "/Portafolio4.jpg",
   "/Portafolio5.jpg",
-  "/Slider1.jpg",
+  "/Casa-Jose-Slider1.jpeg",
   "/Portafolio7.jpg",
   "/Portafolio8.png",
   "/Portafolio9.jpg",
