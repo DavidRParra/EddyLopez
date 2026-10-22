@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react";
 import Link from "next/link";
 import { FaVideo, FaTrash, FaEdit, FaUpload, FaDatabase, FaExclamationTriangle, FaEye } from "react-icons/fa";
+import AdminImagesSection from '../../components/AdminImagesSection';
 
 interface Video {
   id: number;
@@ -378,9 +379,9 @@ export default function AdminVideosPage() {
             <h3 className="text-2xl font-bold text-[#002861]">Videos Publicados ({videos.length})</h3>
           </div>
 
-          <div className="overflow-x-auto">
-            <table className="w-full text-left border-collapse">
-              <thead>
+          <div className="max-h-120 overflow-y-auto overflow-x-auto">
+            <table className="w-full text-left border-collapse relative">
+              <thead className="sticky top-0 bg-gray-100 z-10">
                 <tr className="bg-gray-100 text-gray-700 text-sm font-extrabold uppercase tracking-wider border-b border-gray-200">
                   <th className="py-5 px-8">Título</th>
                   <th className="py-5 px-8">Archivo</th>
@@ -428,6 +429,8 @@ export default function AdminVideosPage() {
             </table>
           </div>
         </div>
+
+        <AdminImagesSection/>
 
       </div>
     </div>

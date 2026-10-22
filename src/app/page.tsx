@@ -1,7 +1,7 @@
 'use client';
 import Image from "next/image";
 import Link from "next/link";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { FaChevronDown, FaSearch } from "react-icons/fa";
 import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
@@ -10,6 +10,26 @@ import "slick-carousel/slick/slick-theme.css";
 export default function Home() {
   const [isOpen, setIsOpen] = useState(false);
   const [inputValue, setInputValue] = useState('');
+  
+  // Estados para las imágenes del carrusel dinámicas
+  const [carruselImages, setCarruselImages] = useState<any[]>([]);
+
+  // Cargar las imágenes del carrusel desde la API filtradas por "carrusel"
+  useEffect(() => {
+    const fetchCarruselImages = async () => {
+      try {
+        const res = await fetch("/apis/imagenes?ubicacion=carrusel");
+        const data = await res.json();
+        if (res.ok && data.success) {
+          setCarruselImages(data.images || []);
+        }
+      } catch (err) {
+        console.error("Error al cargar las imágenes del carrusel", err);
+      }
+    };
+
+    fetchCarruselImages();
+  }, []);
 
   const settings = {
     dots: true,
@@ -26,40 +46,25 @@ export default function Home() {
     <div className="mt-3 overflow-x-hidden">
       <div className="flex flex-col items-center max-w-[100vw] mx-auto justify-center px-4 md:px-0">
         
-        {/* CARRUSEL RESPONSIVE */}
+        {/* CARRUSEL RESPONSIVE DINÁMICO */}
         <div className="w-[92vw] md:w-[75vw] my-4">
-          <Slider {...settings} className="w-full">
-            <div className="w-full h-[30vh] sm:h-[50vh] md:h-[80vh]">
-              <Image src="/Slider10.png" alt="Imagen fondo" width={1500} height={1000} className="w-full h-full object-cover rounded-lg" />
+          {carruselImages.length === 0 ? (
+            <div className="w-full h-[30vh] sm:h-[50vh] md:h-[80vh] flex items-center justify-center bg-gray-100 rounded-lg text-gray-500">
+              Cargando carrusel o no hay imágenes disponibles...
             </div>
-            <div className="w-full h-[30vh] sm:h-[50vh] md:h-[80vh]">
-              <Image src="/Slider11.png" alt="Imagen fondo" width={1500} height={1000} className="w-full h-full object-cover rounded-lg" />
-            </div>
-            <div className="w-full h-[30vh] sm:h-[50vh] md:h-[80vh]">
-              <Image src="/Casa-Jose-Slider1.jpeg" alt="Imagen fondo" width={1000} height={1000} className="w-full h-full object-cover rounded-lg" />
-            </div>
-            <div className="w-full h-[30vh] sm:h-[50vh] md:h-[80vh]">
-              <Image src="/Slider12.png" alt="Imagen fondo" width={1500} height={1000} className="w-full h-full object-cover rounded-lg" />
-            </div>
-            <div className="w-full h-[30vh] sm:h-[50vh] md:h-[80vh]">
-              <Image src="/Slider13.jpeg" alt="Imagen fondo" width={1500} height={1000} className="w-full h-full object-cover rounded-lg" />
-            </div>
-            <div className="w-full h-[30vh] sm:h-[50vh] md:h-[80vh]">
-              <Image src="/Slider14.jpg" alt="Imagen fondo" width={1500} height={1000} className="w-full h-full object-cover rounded-lg" />
-            </div>
-            <div className="w-full h-[30vh] sm:h-[50vh] md:h-[80vh]">
-              <Image src="/Slider15.png" alt="Imagen fondo" width={1000} height={1000} className="w-full h-full object-cover rounded-lg" />
-            </div>
-            <div className="w-full h-[30vh] sm:h-[50vh] md:h-[80vh]">
-              <Image src="/Slider7.jpg" alt="Imagen fondo" width={1000} height={1000} className="w-full h-full object-cover rounded-lg" />
-            </div>
-            <Link href="https://www.instagram.com/p/DMYxL3WysrM/" target="_blank" className="w-full h-[30vh] sm:h-[50vh] md:h-[80vh] block">
-              <Image src="/Slider8.png" alt="Imagen fondo" width={700} height={1500} className="w-full h-full object-cover rounded-lg" />
-            </Link>
-            <div className="w-full h-[30vh] sm:h-[50vh] md:h-[80vh]">
-              <Image src="/Slider9.png" alt="Imagen fondo" width={1000} height={1000} className="w-full h-full object-cover rounded-lg" />
-            </div>
-          </Slider>
+          ) : (
+            <Slider {...settings} className="w-full">
+              {carruselImages.map((img) => (
+                <div key={img.id} className="w-full h-[30vh] sm:h-[50vh] md:h-[80vh]">
+                  <img 
+                    src={img.file_path} 
+                    alt={img.title || "Imagen carrusel"} 
+                    className="w-full h-full object-cover rounded-lg shadow-sm" 
+                  />
+                </div>
+              ))}
+            </Slider>
+          )}
         </div>
 
         {/* SECCIÓN DE ASESORÍA INMOBILIARIA */}
