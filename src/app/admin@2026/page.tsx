@@ -18,11 +18,17 @@ interface Video {
 
 export default function AdminVideosPage() {
   const [videos, setVideos] = useState<Video[]>([]);
-  const [usedBytes, setUsedBytes] = useState(0);
-  const [usedGB, setUsedGB] = useState("0");
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
   const [successMsg, setSuccessMsg] = useState("");
+
+  // Estado global para el almacenamiento de toda la carpeta /var/www/EddyLopez
+  const [storageStats, setStorageStats] = useState({
+    usedBytes: 0,
+    usedGB: "0",
+    maxGB: 5,
+    isFull: false,
+  });
 
   // Estados para modales / formularios
   const [isUploading, setIsUploading] = useState(false);
@@ -36,20 +42,31 @@ export default function AdminVideosPage() {
   const MAX_LIMIT_GB = 5;
   const maxBytes = MAX_LIMIT_GB * 1024 * 1024 * 1024;
 
-  // Cargar datos al iniciar
-  const fetchVideos = async () => {
+  // Cargar datos y estadísticas reales de la carpeta al iniciar
+  const fetchData = async () => {
     try {
       setLoading(true);
       setError("");
-      const res = await fetch("/apis/videos");
-      const data = await res.json();
-      
-      if (res.ok && (data.success || Array.isArray(data.videos) || Array.isArray(data))) {
-        setVideos(data.videos || data);
-        setUsedBytes(data.usedStorageBytes || 0);
-        setUsedGB(data.usedStorageGB || "0");
+
+      // 1. Cargar lista de videos
+      const resVideos = await fetch("/apis/videos");
+      const dataVideos = await resVideos.json();
+      if (resVideos.ok) {
+        setVideos(dataVideos.videos || dataVideos);
       } else {
-        setError(data.error || "No se pudieron cargar los videos.");
+        setError(dataVideos.error || "No se pudieron cargar los videos.");
+      }
+
+      // 2. Cargar tamaño real de la carpeta completa /var/www/EddyLopez
+      const resStorage = await fetch("/apis/storage-stats");
+      const dataStorage = await resStorage.json();
+      if (resStorage.ok && dataStorage.success) {
+        setStorageStats({
+          usedBytes: dataStorage.usedStorageBytes,
+          usedGB: dataStorage.usedStorageGB,
+          maxGB: dataStorage.maxStorageGB,
+          isFull: dataStorage.isFull,
+        });
       }
     } catch (err) {
       setError("Error de red al conectar con el servidor.");
@@ -59,13 +76,13 @@ export default function AdminVideosPage() {
   };
 
   useEffect(() => {
-    fetchVideos();
+    fetchData();
   }, []);
 
-  // Calcular porcentaje de uso y espacio libre
-  const percentage = Math.min(Number(((usedBytes / maxBytes) * 100).toFixed(1)), 100);
+  // Calcular porcentaje de uso y espacio libre basado en la carpeta completa
+  const percentage = Math.min(Number(((storageStats.usedBytes / maxBytes) * 100).toFixed(1)), 100);
   const freePercentage = Number((100 - percentage).toFixed(1));
-  const freeGB = Math.max(MAX_LIMIT_GB - Number(usedGB), 0).toFixed(2);
+  const freeGB = Math.max(MAX_LIMIT_GB - Number(storageStats.usedGB), 0).toFixed(2);
 
   // Parámetros de la Dona SVG
   const radius = 52;
@@ -76,7 +93,6 @@ export default function AdminVideosPage() {
   const freeLength = (freePercentage / 100) * circumference;
 
   // Cálculo de los ángulos medios (en radianes) para colocar las etiquetas DENTRO del grosor del anillo
-  // Ángulo de inicio: -90° (arriba del círculo)
   const angleUsedMid = -Math.PI / 2 + (percentage / 100) * Math.PI;
   const angleFreeMid = -Math.PI / 2 + (percentage / 100) * 2 * Math.PI + (freePercentage / 100) * Math.PI;
 
@@ -86,11 +102,17 @@ export default function AdminVideosPage() {
   const xFree = 80 + radius * Math.cos(angleFreeMid);
   const yFree = 80 + radius * Math.sin(angleFreeMid);
 
-  // Manejar Subida (POST)
+  // Manejar Subida (POST) con validación estricta de 5 GB globales
   const handleUpload = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!file || !title) {
       setError("Por favor complete el título y seleccione un archivo de video.");
+      return;
+    }
+
+    // Bloquear si el archivo excede el espacio restante en los 5 GB globales de la carpeta
+    if (storageStats.usedBytes + file.size > maxBytes) {
+      setError(`No hay suficiente espacio en el servidor (${storageStats.usedGB} GB usados de 5 GB). El video excede el límite.`);
       return;
     }
 
@@ -115,7 +137,7 @@ export default function AdminVideosPage() {
         setTitle("");
         setFile(null);
         setIsUploading(false);
-        fetchVideos();
+        fetchData(); // Recarga la tabla y recalcula el espacio real de la carpeta
       } else {
         setError(data.error || "El servidor rechazó la subida del video.");
       }
@@ -134,7 +156,13 @@ export default function AdminVideosPage() {
     const formData = new FormData();
     formData.append("id", String(editingVideo.id));
     formData.append("title", title);
-    if (file) formData.append("file", file);
+    if (file) {
+      if (storageStats.usedBytes + file.size > maxBytes) {
+        setError(`No hay suficiente espacio en el servidor para reemplazar el archivo.`);
+        return;
+      }
+      formData.append("file", file);
+    }
 
     try {
       setLoading(true);
@@ -152,7 +180,7 @@ export default function AdminVideosPage() {
         setEditingVideo(null);
         setTitle("");
         setFile(null);
-        fetchVideos();
+        fetchData();
       } else {
         setError(data.error || "No se pudo actualizar la publicación.");
       }
@@ -176,7 +204,7 @@ export default function AdminVideosPage() {
 
       if (res.ok && data.success) {
         setSuccessMsg("Video eliminado correctamente.");
-        fetchVideos();
+        fetchData();
       } else {
         alert(data.error || "No se pudo eliminar el video.");
       }
@@ -229,22 +257,22 @@ export default function AdminVideosPage() {
           </div>
         )}
 
-        {/* Tarjeta de Medidor de Almacenamiento */}
+        {/* Tarjeta de Medidor de Almacenamiento Global */}
         <div className="bg-white rounded-2xl shadow-sm border border-gray-200 p-8 mb-8 flex flex-col md:flex-row items-center justify-between gap-8">
           <div className="flex-1">
             <h2 className="text-2xl font-bold text-[#002861] flex items-center gap-3 mb-3">
-              <FaDatabase /> Almacenamiento (Límite: 5 GB)
+              <FaDatabase /> Almacenamiento General (/var/www/EddyLopez - Límite: 5 GB)
             </h2>
             <p className="text-gray-600 text-lg mb-6">
-              Control en tiempo real del espacio ocupado por los archivos de video multimedia
+              Control en tiempo real del espacio ocupado combinando videos e imágenes en el servidor.
             </p>
             <div className="flex flex-wrap gap-6 text-base font-semibold">
               <div className="flex items-center gap-3">
-                <span className="w-4 h-4 rounded-full bg-[#002861] inline-block"></span>
-                <span>Ocupado: <strong className="text-lg">{usedGB} GB</strong></span>
+                <span className="w-4 h-4 rounded-full bg-[#E7000B] inline-block"></span>
+                <span>Ocupado: <strong className="text-lg">{storageStats.usedGB} GB</strong></span>
               </div>
               <div className="flex items-center gap-3">
-                <span className="w-4 h-4 rounded-full bg-[#3B82F6] inline-block"></span>
+                <span className="w-4 h-4 rounded-full bg-[#002861] inline-block"></span>
                 <span>Disponible: <strong className="text-lg">{freeGB} GB</strong></span>
               </div>
             </div>
@@ -258,7 +286,7 @@ export default function AdminVideosPage() {
           {/* Gráfico Circular con Números Dentro de las Franjas de Color */}
           <div className="relative w-48 h-48 flex items-center justify-center flex-shrink-0">
             <svg viewBox="0 0 160 160" className="w-full h-full">
-              {/* Sección Disponible (#3B82F6) */}
+              {/* Sección Disponible (#002861) */}
               <circle
                 cx="80"
                 cy="80"
@@ -270,7 +298,7 @@ export default function AdminVideosPage() {
                 strokeDashoffset={-usedLength}
                 transform="rotate(-90 80 80)"
               />
-              {/* Sección Usado (#002861) */}
+              {/* Sección Usado (#E7000B) */}
               <circle
                 cx="80"
                 cy="80"
@@ -349,7 +377,7 @@ export default function AdminVideosPage() {
                     onChange={(e) => setFile(e.target.files?.[0] || null)}
                     className="w-full border border-gray-300 rounded-lg p-2 text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-[#002861] file:text-white hover:file:bg-[#001d47]"
                   />
-                  <p className="text-xs text-gray-500 mt-1">Asegúrate de que el video no supere el espacio disponible en disco.</p>
+                  <p className="text-xs text-gray-500 mt-1">Asegúrate de que el video no supere el espacio disponible en disco (Límite global: 5 GB).</p>
                 </div>
 
                 <div className="flex justify-end gap-3 mt-6">
@@ -362,7 +390,7 @@ export default function AdminVideosPage() {
                   </button>
                   <button
                     type="submit"
-                    disabled={loading}
+                    disabled={loading || storageStats.isFull}
                     className="px-5 py-2 bg-[#002861] text-white rounded-lg hover:bg-[#001d47] font-medium shadow disabled:opacity-50"
                   >
                     {loading ? "Procesando..." : editingVideo ? "Actualizar Cambios" : "Subir y Guardar"}
@@ -373,8 +401,12 @@ export default function AdminVideosPage() {
           </div>
         )}
 
+        <p className="text-4xl my-6 text-center">
+          Panel para subir Videos
+        </p>
+
         {/* Tabla de Publicaciones con Letras Grandes */}
-        <div className="bg-white rounded-2xl shadow-sm border border-gray-200 overflow-hidden">
+        <div className="bg-white rounded-2xl shadow-sm border border-gray-200 overflow-hidden mb-10">
           <div className="px-8 py-6 border-b border-gray-200">
             <h3 className="text-2xl font-bold text-[#002861]">Videos Publicados ({videos.length})</h3>
           </div>
@@ -429,6 +461,10 @@ export default function AdminVideosPage() {
             </table>
           </div>
         </div>
+        
+        <p className="text-4xl text-center">
+          Panel para subir Imagenes
+        </p>
 
         <AdminImagesSection/>
 
