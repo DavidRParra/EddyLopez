@@ -1,46 +1,36 @@
-"use client";
+'use client';
 
 import Image from "next/image";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { FaFile } from "react-icons/fa";
 import Link from "next/link";
 import ModalImage from "@/components/modals/modal-image";
 import FadeIn from "@/components/ScaleIn";
 
-const ImageUrls = [
-  "/Portafolio1.jpg",
-  "/Portafolio2.png",
-  "/Portafolio3.jpg",
-  "/Portafolio4.jpg",
-  "/Portafolio5.jpg",
-  "/Casa-Jose-Slider1.jpeg",
-  "/Portafolio7.jpg",
-  "/Portafolio8.png",
-  "/Portafolio9.jpg",
-  "/Portafolio10.jpg",
-  "/Portafolio11.png",
-  "/Slider8.png",
-];
-
-const ImageRecurso = [
-  "#",
-  "#",
-  "#",
-  "#",
-  "#",
-  "#",
-  "#",
-  "#",
-  "#",
-  "#",
-  "#",
-  "/Video1.mp4",
-];
-
 export default function Page() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [modalUrl, setModalUrl] = useState("");
-  const [modalRecurso, setModalRecurso] = useState(0);
+  const [modalTitle, setModalTitle] = useState("");
+
+  // Estados para las imágenes del portafolio dinámicas
+  const [portafolioImages, setPortafolioImages] = useState<any[]>([]);
+
+  // Cargar las imágenes del portafolio desde la API filtradas por "portafolio"
+  useEffect(() => {
+    const fetchPortafolioImages = async () => {
+      try {
+        const res = await fetch("/apis/imagenes?ubicacion=portafolio");
+        const data = await res.json();
+        if (res.ok && data.success) {
+          setPortafolioImages(data.images || []);
+        }
+      } catch (err) {
+        console.error("Error al cargar las imágenes del portafolio", err);
+      }
+    };
+
+    fetchPortafolioImages();
+  }, []);
 
   const openModal = () => setIsModalOpen(true);
   const closeModal = () => setIsModalOpen(false);
@@ -65,84 +55,90 @@ export default function Page() {
           lg:gap-7
         "
       >
-        {ImageUrls.map((url, index) => (
-          <article
-            key={index}
-            onClick={() => {
-              setModalUrl(url);
-              setModalRecurso(index);
-              openModal();
-            }}
-            className="
-              group
-              w-full
-              overflow-hidden
-              rounded-xl
-              bg-white
-              border
-              border-gray-200
-              shadow-sm
-              cursor-pointer
-
-              transition-all
-              duration-300
-              hover:-translate-y-1
-              hover:shadow-xl
-            "
-          >
-            {/* IMAGEN */}
-            <div
+        {portafolioImages.length === 0 ? (
+          <div className="col-span-full text-center py-20 text-gray-500 text-lg">
+            Cargando imágenes del portafolio o no hay registros disponibles...
+          </div>
+        ) : (
+          portafolioImages.map((img) => (
+            <article
+              key={img.id}
+              onClick={() => {
+                setModalUrl(img.file_path);
+                setModalTitle(img.title);
+                openModal();
+              }}
               className="
-                relative
+                group
                 w-full
-                aspect-[16/10]
                 overflow-hidden
-                bg-gray-100
-              "
-            >
-              <Image
-                src={url}
-                alt={`Proyecto ${index + 1}`}
-                fill
-                sizes="
-                  (max-width: 640px) 100vw,
-                  (max-width: 1024px) 50vw,
-                  33vw
-                "
-                className="
-                  object-cover
-                  transition-transform
-                  duration-500
-                  group-hover:scale-105
-                "
-              />
-            </div>
+                rounded-xl
+                bg-white
+                border
+                border-gray-200
+                shadow-sm
+                cursor-pointer
 
-            {/* TEXTO */}
-            <div
-              className="
-                px-3
-                py-3
-                sm:px-4
-                sm:py-4
-                text-center
+                transition-all
+                duration-300
+                hover:-translate-y-1
+                hover:shadow-xl
               "
             >
-              <p
+              {/* IMAGEN */}
+              <div
                 className="
-                  text-sm
-                  sm:text-base
-                  lg:text-lg
-                  font-semibold
-                  leading-tight
-                  text-[#002861]
+                  relative
+                  w-full
+                  aspect-[16/10]
+                  overflow-hidden
+                  bg-gray-100
                 "
               >
-                Imágenes del Proyecto Terminado
-              </p>
-            </div>
-          </article>
-        ))}
+                <Image
+                  src={img.file_path}
+                  alt={img.title || "Imagen del portafolio"}
+                  fill
+                  sizes="
+                    (max-width: 640px) 100vw,
+                    (max-width: 1024px) 50vw,
+                    33vw
+                  "
+                  className="
+                    object-cover
+                    transition-transform
+                    duration-500
+                    group-hover:scale-105
+                  "
+                />
+              </div>
+
+              {/* TEXTO */}
+              <div
+                className="
+                  px-3
+                  py-3
+                  sm:px-4
+                  sm:py-4
+                  text-center
+                "
+              >
+                <p
+                  className="
+                    text-sm
+                    sm:text-base
+                    lg:text-lg
+                    font-semibold
+                    leading-tight
+                    text-[#002861]
+                  "
+                >
+                  {img.title}
+                </p>
+              </div>
+            </article>
+          ))
+        )}
 
         {/* MODAL */}
         <ModalImage
@@ -173,11 +169,9 @@ export default function Page() {
                   justify-center
                 "
               >
-                <Image
+                <img
                   src={modalUrl}
-                  alt="Vista ampliada del proyecto"
-                  width={1600}
-                  height={1000}
+                  alt={modalTitle || "Vista ampliada"}
                   className="
                     max-h-[80vh]
                     max-w-full
@@ -190,9 +184,9 @@ export default function Page() {
                 />
               </div>
 
-              {/* BOTÓN VER MÁS */}
+              {/* OPCIONAL: Si deseas mantener un enlace o recurso asociado en el futuro */}
               <Link
-                href={ImageRecurso[modalRecurso]}
+                href="#"
                 target="_blank"
                 className="group"
               >
