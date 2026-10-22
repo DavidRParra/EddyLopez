@@ -18,7 +18,7 @@ function NavBar() {
     return(
         <div className="flex justify-between md:justify-evenly items-center w-full mx-[auto] bg-[#FFFFFF] text-[1.8rem] p-3 text-black relative border-[#002861] shadow-md z-40">
 
-            <Link href="/" className="relative flex justify-center gap-4 items-center text-[2.5rem]">
+            <div className="relative flex justify-center gap-4 items-center text-[2.5rem]">
                 {/* Contenedor con group para activar el hover del logo */}
                 <div className="relative flex justify-center gap-4 items-center text-[2.5rem]">
                     {/* Un solo Link hacia /nosotros para el Logo y la Tarjeta Desplegable */}
@@ -54,7 +54,7 @@ function NavBar() {
                         (809) 399-8344
                     </p>
                 </div>
-            </Link>
+            </div>
 
             {/* BOTÓN DE MENÚ HAMBURGUESA (MÓVIL) */}
             <div className="flex lg:hidden">

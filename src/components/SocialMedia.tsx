@@ -31,7 +31,7 @@ export default function SocialMedia() {
                 
                 <div 
                     className={`
-                        flex items-center gap-3 bg-white/90 backdrop-blur-md px-3 py-2 rounded-l-full shadow-lg border-y border-l border-gray-200
+                        flex items-center gap-3 bg-white backdrop-blur-md px-3 py-2 rounded-l-full shadow-lg border-y border-l border-gray-200
                         transition-all duration-300 ease-in-out origin-right
                         ${isOpen ? "opacity-100 scale-100 translate-x-0 pointer-events-auto" : "opacity-0 scale-50 translate-x-10 pointer-events-none w-0 overflow-hidden px-0"}
                     `}

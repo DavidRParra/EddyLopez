@@ -5,24 +5,6 @@ import ScaleIn from "@/components/ScaleIn";
 import { FaArrowRight } from "react-icons/fa";
 import ModalImage from "@/components/modals/modal-image";
 
-interface Appointment {
-  appointmentDtlId?: number;
-  userID?: number;
-  AppointmentAddressID?: number;
-  firstName?: string;
-  lastName?: string;
-  fullName?: string;
-  phone?: string;
-  email?: string;
-  consultingDate?: Date;
-  consultingType?: string;
-  comment?: string;
-  status?: string;
-  cratedBy?: string;
-  createdDate?: Date;
-  lastUpdateDate?: Date;
-}
-
 function ContactoPage() {
   const [isModalOpen, setIsModalOpen] = useState(false);
 
@@ -50,10 +32,19 @@ function ContactoPage() {
       HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
     >
   ) => {
-    setFormData({
-      ...formData,
-      [e.target.name]: e.target.value,
-    });
+    const {name, value} = e.target;
+
+    if (name === "phone"){
+      setFormData({
+        ...formData,
+        phone: formatPhoneNumber(value),
+      });
+    } else {
+      setFormData({
+        ...formData,
+        [name]: value,
+      });
+    }
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -70,21 +61,52 @@ function ContactoPage() {
 
       const data = await res.json();
 
+      // Validamos si la respuesta del servidor fue exitosa (status 200-299)
+      if (!res.ok) {
+        throw new Error(data.message || "Error al guardar en la base de datos");
+      }
+
+      // Si todo sale bien:
       setModalMessage(
         "Cita creada con éxito, nuestra oficina se pondrá en contacto contigo pronto."
       );
-
       setConfirm(true);
       openModal();
-    } catch (error) {
-      setModalMessage(
-        "Error al crear la cita. Por favor, intenta de nuevo.\n" + error
-      );
 
+      // Opcional: limpiar el formulario tras el éxito
+      setFormData({
+        firstName: "",
+        lastName: "",
+        phone: "",
+        email: "",
+        appointmentDate: "",
+        type: "",
+        message: "",
+      });
+
+    } catch (error: any) {
+      // Si ocurre cualquier error (de red o lanzado por el servidor)
+      setModalMessage(
+        "Error al crear la cita. Por favor, intenta de nuevo.\n" + (error.message || error)
+      );
       setConfirm(false);
       openModal();
     }
   };
+
+  // Función para formatear el teléfono en estilo XXX-XXX-XXXX
+  const formatPhoneNumber = (value: string) => {
+    const numbers = value.replace(/\D/g, "");
+    const trimmed = numbers.slice(0, 10);
+    if (trimmed.length > 6) {
+      return `(${trimmed.slice(0, 3)})-${trimmed.slice(3, 6)}-${trimmed.slice(6)}`;
+    } else if (trimmed.length > 3) {
+      return `(${trimmed.slice(0, 3)})-${trimmed.slice(3)}`;
+    }
+    return trimmed;
+  };
+
+  const today = new Date().toISOString().split("T")[0];
 
   return (
     <main
@@ -386,11 +408,13 @@ function ContactoPage() {
                 <input
                   id="phone"
                   type="tel"
+                  inputMode="numeric"
                   required
                   name="phone"
                   value={formData.phone}
                   onChange={handleChange}
-                  placeholder="8299992211"
+                  placeholder="(829)-999-2211"
+                  maxLength={12}
                   className="
                     w-full
 
@@ -618,6 +642,7 @@ function ContactoPage() {
                   id="appointmentDate"
                   type="date"
                   name="appointmentDate"
+                  min={today}
                   value={formData.appointmentDate}
                   onChange={handleChange}
                   required
