@@ -414,7 +414,7 @@ function ContactoPage() {
                   value={formData.phone}
                   onChange={handleChange}
                   placeholder="(829)-999-2211"
-                  maxLength={12}
+                  maxLength={14}
                   className="
                     w-full
 
