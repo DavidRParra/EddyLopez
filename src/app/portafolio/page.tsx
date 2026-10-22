@@ -1,6 +1,5 @@
 'use client';
 
-import Image from "next/image";
 import { useState, useEffect } from "react";
 import { FaFile } from "react-icons/fa";
 import Link from "next/link";
@@ -12,10 +11,8 @@ export default function Page() {
   const [modalUrl, setModalUrl] = useState("");
   const [modalTitle, setModalTitle] = useState("");
 
-  // Estados para las imágenes del portafolio dinámicas
   const [portafolioImages, setPortafolioImages] = useState<any[]>([]);
 
-  // Cargar las imágenes del portafolio desde la API filtradas por "portafolio"
   useEffect(() => {
     const fetchPortafolioImages = async () => {
       try {
@@ -85,7 +82,7 @@ export default function Page() {
                 hover:shadow-xl
               "
             >
-              {/* IMAGEN */}
+              {/* IMAGEN (Cambiado a etiqueta <img> estándar para que Nginx la sirva sin problemas) */}
               <div
                 className="
                   relative
@@ -95,16 +92,12 @@ export default function Page() {
                   bg-gray-100
                 "
               >
-                <Image
+                <img
                   src={img.file_path}
                   alt={img.title || "Imagen del portafolio"}
-                  fill
-                  sizes="
-                    (max-width: 640px) 100vw,
-                    (max-width: 1024px) 50vw,
-                    33vw
-                  "
                   className="
+                    w-full
+                    h-full
                     object-cover
                     transition-transform
                     duration-500
@@ -184,7 +177,6 @@ export default function Page() {
                 />
               </div>
 
-              {/* OPCIONAL: Si deseas mantener un enlace o recurso asociado en el futuro */}
               <Link
                 href="#"
                 target="_blank"
