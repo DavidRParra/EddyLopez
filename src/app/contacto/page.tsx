@@ -47,51 +47,47 @@ function ContactoPage() {
     }
   };
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
 
-    try {
-      const res = await fetch("/apis/guardar_formulario", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(formData),
-      });
-
-      const data = await res.json();
-
-      // Validamos si la respuesta del servidor fue exitosa (status 200-299)
-      if (!res.ok) {
-        throw new Error(data.message || "Error al guardar en la base de datos");
-      }
-
-      // Si todo sale bien:
-      setModalMessage(
-        "Cita creada con éxito, nuestra oficina se pondrá en contacto contigo pronto."
-      );
-      setConfirm(true);
-      openModal();
-
-      // Opcional: limpiar el formulario tras el éxito
-      setFormData({
-        firstName: "",
-        lastName: "",
-        phone: "",
-        email: "",
-        appointmentDate: "",
-        type: "",
-        message: "",
-      });
-
-    } catch (error: any) {
-      // Si ocurre cualquier error (de red o lanzado por el servidor)
-      setModalMessage(
-        "Error al crear la cita. Por favor, intenta de nuevo.\n" + (error.message || error)
-      );
-      setConfirm(false);
-      openModal();
+    // Guardado en base de datos desactivado temporalmente.
+    // Se conserva la solicitud original para activarla más adelante:
+    /*
+    const res = await fetch("/apis/guardar_formulario", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(formData),
+    });
+    const data = await res.json();
+    if (!res.ok) {
+      throw new Error(data.message || "Error al guardar en la base de datos");
     }
+    */
+
+    const numeroWhatsApp = "18093998344";  
+    const tiposConsulta: Record<string, string> = {
+      compra: "Compra",
+      alquiler: "Alquiler",
+      venta: "Venta",
+      evaluacion: "Evaluación",
+      hipoteca: "Hipoteca",
+      otro: "Otro",
+    };
+
+    const mensajeWhatsApp = [
+      "Hola, deseo confirmar mi cita.",
+      "",
+      `Nombre: ${formData.firstName}`,
+      `Apellido: ${formData.lastName}`,
+      `Teléfono: ${formData.phone}`,
+      `Correo: ${formData.email}`,
+      `Tipo de consulta: ${tiposConsulta[formData.type] || formData.type}`,
+      `Fecha de la consulta: ${formData.appointmentDate}`,
+      `Mensaje: ${formData.message}`,
+    ].join("\n");
+
+    const enlaceWhatsApp = `https://wa.me/${numeroWhatsApp}?text=${encodeURIComponent(mensajeWhatsApp)}`;
+    window.location.href = enlaceWhatsApp;
   };
 
   // Función para formatear el teléfono en estilo XXX-XXX-XXXX
